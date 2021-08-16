@@ -5,25 +5,25 @@
  */
 
 #include <Arduino.h>
+#include <reflectanceSensor.h>
 
 // Set LED_BUILTIN if it is not defined by Arduino framework
 // #define LED_BUILTIN 2
+unsigned long convToBin(unsigned int);
+
 
 void setup()
 {
-  // initialize LED digital pin as an output.
-  pinMode(LED_BUILTIN, OUTPUT);
+
+  Serial.begin(115200);
+  Serial1.begin(115200);
+  pinMode(13, OUTPUT);
+  sensorSetup();
 }
 
 void loop()
 {
-  //Teständerung
-  // turn the LED on (HIGH is the voltage level)
-  digitalWrite(LED_BUILTIN, HIGH);
-  // wait for a second
-  delay(500);
-  // turn the LED off by making the voltage LOW
-  digitalWrite(LED_BUILTIN, LOW);
-   // wait for a second
-  delay(500);
+  //sensorUpdate();
+  //int x = getSensorData;
+  Serial.println((int)getSensorData(), BIN);
 }
