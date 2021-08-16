@@ -8,8 +8,15 @@ void setup() {
 
 void loop() {
   Serial.println("Start");
-  if(turn_servo(141) == 1)
-    Serial.println("ERROR");
-  delay(2000);
+  // TEST: Es wird komplett nach links und dann nach Rechts gelenkt
+  for (int i = 0; i < 36; i++) {
+    turn_servo(i);
+    delay(20);
+  }
+
+  for (int i = 0; i > -36; i--) {
+    turn_servo(i);
+    delay(20);
+  }
   Serial.println("Stop");
 }

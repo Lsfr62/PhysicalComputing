@@ -4,6 +4,6 @@
 #pragma once
 
 void initialize_servo(int pinnum);
-int turn_servo(int angle);
+void turn_servo(int angle);
 
 #endif //STEERINGCONTROL_H
