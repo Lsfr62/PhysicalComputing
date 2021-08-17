@@ -1,4 +1,11 @@
+/*
+ * 2WD RC SMART CAR CHASSIS
+ * 
+ * 
+ */
+
 #include <Arduino.h>
+#include <drivecontrol.h>
 #include <steeringControl.h>
 #include <reflectanceSensor.h>
 
@@ -8,6 +15,7 @@ unsigned long convToBin(unsigned int);
 
 void setup() {
   Serial.begin(115200);
+  initial_motor(4, 0, 16, 17,34);
   initialize_servo(15);
   pinMode(13, OUTPUT);
   sensorSetup();
@@ -29,5 +37,5 @@ void loop() {
   //int x = getSensorData;
   Serial.println((int)getSensorData(), BIN);
   Serial.println("Stop");
+  drive()
 }
-
