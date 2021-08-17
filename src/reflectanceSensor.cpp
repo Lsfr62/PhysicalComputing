@@ -1,13 +1,10 @@
 #include <Arduino.h>
 //TODO Werte in Speicher speichern und kallibrierung skippen
-const int numberOfSensors = 15;
+const int numberOfSensors = 16;
 int sensors[numberOfSensors];
 int messwerte[numberOfSensors];
 int threshold[numberOfSensors]; //jeder Sensr braucht einen individuellen Wert, um beste Ergebnisse zu bringen
-//int messwert = 0;
-//int ioLine = 15;
 int control = 13;
-int calibrationButton = 14;
 void ausgabe();
 void callibriereThreshold();
 void waitTillEnter();
@@ -40,7 +37,7 @@ void sensorUpdate()
 {
     for (int i = 0; i < numberOfSensors; i++)
     {
-        if (sensors[i] < 0)
+        if (threshold[i] < 0)
             continue;
         digitalWrite(control, HIGH);
 
@@ -55,7 +52,7 @@ void sensorUpdate()
         digitalWrite(control, LOW);
         delayMicroseconds(500);
     }
-    //ausgabe();
+    ausgabe();
     
 }
 
@@ -68,19 +65,54 @@ void sensorSetup()
         messwerte[i] = -1;
         threshold[i] = -1;
     }
-    sensors[1 - 1] = 15;
-    sensors[3 - 1] = 27; //2;
+    /*
+    sensors[1 - 1] = 5;
+    //sensors[2 - 1] = 14;
+    sensors[3 - 1] = 18; 
+    //sensors[4 - 1] = 27;
+    sensors[5 - 1] = 19;
+    //sensors[6 - 1] = 26;
+    sensors[7 - 1] = 21;
+    //sensors[8 - 1] = 25;
+    sensors[9 - 1] = 22;
+    //sensors[10 - 1] = 33;
+    sensors[11 - 1] = 9;
+    //sensors[12 - 1] = 32;
+    sensors[13 - 1] = 13;
+    //sensors[14 - 1] = 8;
+    sensors[15 - 1] = 12;
+    //sensors[(16 - 1)] = 7;
+    */
+   sensors[1 - 1] = 27;
+    //sensors[2 - 1] = 14;
+    sensors[3 - 1] = 2; 
+    //sensors[4 - 1] = 27;
     sensors[5 - 1] = 12;
-    sensors[7 - 1] = 4;
-    sensors[9 - 1] = 16;
-    sensors[11 - 1] = 17;
+    //sensors[6 - 1] = 26;
+    sensors[7 - 1] = 18;
+    //sensors[8 - 1] = 25;
+    sensors[9 - 1] = 19;
+    //sensors[10 - 1] = 33;
+    sensors[11 - 1] = 26;
+    //sensors[12 - 1] = 32;
     sensors[13 - 1] = 5;
-    sensors[15 - 1] = 18;
+    //sensors[14 - 1] = 8;
+    sensors[15 - 1] = 21;
+    //sensors[(16 - 1)] = 7;
+    
 
     //zu viele 0-en => Zahl runter, zu viele  1-er => Zahl hoch
 
     //RC Kit Beschreibzung soll in Doc!
-    callibriereThreshold();
+    //callibriereThreshold();
+    threshold[0] = 1160;
+    threshold[2] = 610;
+    threshold[4] = 1030;
+    threshold[6] = 1135;
+    threshold[8] = 1010;
+    threshold[10] = 1090;
+    threshold[12] = 1030;
+    
 }
 
 
@@ -100,7 +132,6 @@ void sensorSetup()
 void callibriereThreshold()
 {
 
-    pinMode(calibrationButton, INPUT);
 
     int supremumThresholds[numberOfSensors];
     int infimumThresholds[numberOfSensors];
@@ -229,7 +260,7 @@ void callibriereThreshold()
         Serial.print(threshold[i]);
         Serial.print(", ");
     }
-
+    waitTillEnter();
     //while(true);
 }
 
