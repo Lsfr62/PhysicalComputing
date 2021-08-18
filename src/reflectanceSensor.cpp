@@ -97,7 +97,7 @@ void sensorSetup()
     //sensors[12 - 1] = 32;
     sensors[13 - 1] = 5;
     //sensors[14 - 1] = 8;
-    sensors[15 - 1] = 21;
+    //sensors[15 - 1] = 21;
     //sensors[(16 - 1)] = 7;
     
 

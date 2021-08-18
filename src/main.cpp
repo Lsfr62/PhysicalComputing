@@ -25,6 +25,7 @@ void setup() {
 void loop() {
   //Serial.println();
   turn_servo(steeringOrientation(getSensorData()));
+  drive();
   //delay(300);
   //Serial.println((int)getSensorData(), BIN);
   /*Serial.println("Start");
@@ -42,5 +43,5 @@ void loop() {
   //int x = getSensorData;
   Serial.println((int)getSensorData(), BIN);
   Serial.println("Stop");
-  drive()
+  drive()*/
 }

@@ -26,8 +26,8 @@ int steeringOrientation(uint16_t positions) {
     }
   }
   int middleOfLine = maxPos + nullen[maxPos]/2;
-  return (int) map(middleOfLine, 0,15, -34, 34 );
-
+  return (int) -map(middleOfLine, 2,13, -35, 35 );
+ //gelb, rot, rot, orange, gelb, grün, blau, magenta, grau ,lila
 }
 
 
