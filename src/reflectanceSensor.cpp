@@ -2,13 +2,16 @@
 //TODO Werte in Speicher speichern und kallibrierung skippen
 const int numberOfSensors = 16;
 int sensors[numberOfSensors];
+//int steckplatzZuPinNummerRechts[19]; // z.B. der 5. Steckplatz auf dem Board ist Pin 2, also wäre steckplatzZuPinNummer[5] == 2
+//int steckplatzZuPinNummerLinks[19]; 
 int messwerte[numberOfSensors];
 int threshold[numberOfSensors]; //jeder Sensr braucht einen individuellen Wert, um beste Ergebnisse zu bringen
-int control = 13;
+int control = 13; // Ist der VCC Anschluss
 void ausgabe();
 void callibriereThreshold();
 void waitTillEnter();
 void sensorUpdate();
+void sensorSetup();
 
 /**
  * Ruft Daten von Sensoren ab
@@ -65,6 +68,7 @@ void sensorSetup()
         messwerte[i] = -1;
         threshold[i] = -1;
     }
+
     /*
     sensors[1 - 1] = 5;
     //sensors[2 - 1] = 14;
@@ -99,8 +103,46 @@ void sensorSetup()
     //sensors[14 - 1] = 8;
     //sensors[15 - 1] = 21;
     //sensors[(16 - 1)] = 7;
-    
+ /*
+    steckplatzZuPinNummerLinks[2] = 11;
+    steckplatzZuPinNummerLinks[1] = ;
+    steckplatzZuPinNummerLinks[1] = ;
+    steckplatzZuPinNummerLinks[1] = ;
+    steckplatzZuPinNummerLinks[1] = ;
+    steckplatzZuPinNummerLinks[1] = ;
+    steckplatzZuPinNummerLinks[1] = ;
+    steckplatzZuPinNummerLinks[1] = ;
+    steckplatzZuPinNummerLinks[1] = ;
+    steckplatzZuPinNummerLinks[1] = ;
+    steckplatzZuPinNummerLinks[1] = ;
+    steckplatzZuPinNummerLinks[1] = ;
+    steckplatzZuPinNummerLinks[1] = ;
+    steckplatzZuPinNummerLinks[1] = ;
+    steckplatzZuPinNummerLinks[1] = ;
+    steckplatzZuPinNummerLinks[1] = ;
+    steckplatzZuPinNummerLinks[1] = ;
+    steckplatzZuPinNummerLinks[1] = ;
 
+    steckplatzZuPinNummerRechts[1] = ;
+    steckplatzZuPinNummerRechts[1] = ;
+    steckplatzZuPinNummerRechts[1] = ;
+    steckplatzZuPinNummerRechts[1] = ;
+    steckplatzZuPinNummerRechts[1] = ;
+    steckplatzZuPinNummerRechts[1] = ;
+    steckplatzZuPinNummerRechts[1] = ;
+    steckplatzZuPinNummerRechts[1] = ;
+    steckplatzZuPinNummerRechts[1] = ;
+    steckplatzZuPinNummerRechts[1] = ;
+    steckplatzZuPinNummerRechts[1] = ;
+    steckplatzZuPinNummerRechts[1] = ;
+    steckplatzZuPinNummerRechts[1] = ;
+    steckplatzZuPinNummerRechts[1] = ;
+    steckplatzZuPinNummerRechts[1] = ;
+    steckplatzZuPinNummerRechts[1] = ;
+    steckplatzZuPinNummerRechts[1] = ;
+    steckplatzZuPinNummerRechts[1] = ;
+    steckplatzZuPinNummerRechts[1] = ;
+*/
     //zu viele 0-en => Zahl runter, zu viele  1-er => Zahl hoch
 
     //RC Kit Beschreibzung soll in Doc!
