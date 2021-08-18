@@ -15,8 +15,8 @@
 
 void setup() {
   Serial.begin(115200);
-  //initial_motor(4, 0, 16, 17,34);
-  initialize_servo(15);
+  initial_motor(15, 21, 22, 23,34);
+  initialize_servo(19);
   //pinMode(13, OUTPUT);  // TODO ist das wichtig?
   //Serial.println("B");
   sensorSetup();
@@ -24,10 +24,13 @@ void setup() {
 
 void loop() {
   int angle = getSteeringAngle(getSensorData());
-  Serial.println(angle);
-  //turn_servo(angle);
+  /*if (angle != 0) {
+    break_vehicle(angle);
+  }*/
+  Serial.print(angle);
+  turn_servo(angle);
 
-  //drive();
+  drive();
   //delay(300);
   //Serial.println((int)getSensorData(), BIN);
   /*Serial.println("Start");

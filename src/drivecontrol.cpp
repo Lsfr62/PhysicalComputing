@@ -4,7 +4,9 @@ int pin1, pin2, ult, eep,but;
 int motor_active = 0;
 int but_state = 0;
 int can_drive = 0;
-
+int speed = 0; 
+int turn_motor_off();
+int drive_forward(int);
 
 /**
  *#pin1 the first input for the motor with the pin(4) and the AttachPin(15)
@@ -44,6 +46,7 @@ void break_vehicle(int rotation_angle) {
 }
 
 int turn_motor_off() {
+  speed = 0;
   motor_active = 0;
   ledcWrite(15, LOW);
   ledcWrite(16, LOW);
@@ -64,6 +67,7 @@ int drive_forward(int value) {
     if  (value < 150 || value > 255) {
       value = 255;
     }
+  speed = value;
     ledcWrite(15,value);
     digitalWrite(pin2, LOW);
   return 0;

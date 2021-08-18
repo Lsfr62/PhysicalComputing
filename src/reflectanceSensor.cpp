@@ -6,7 +6,7 @@ int sensors[numberOfSensors];
 //int steckplatzZuPinNummerLinks[19]; 
 int messwerte[numberOfSensors];
 int threshold[numberOfSensors]; //jeder Sensr braucht einen individuellen Wert, um beste Ergebnisse zu bringen
-int control = 15; // Ist der VCC Anschluss
+//int control = 15; // Ist der VCC Anschluss
 void ausgabe();
 void callibriereThreshold();
 void waitTillEnter();
@@ -25,13 +25,17 @@ void sensorSetup();
 */
 uint16_t getSensorData() {
     sensorUpdate();
+
     int16_t erg = 0;
+
     for(int i = 0; i < numberOfSensors; i++) {
-        if (sensors[i] < 0) continue;
-        erg = erg + (messwerte[i] << i) ;
+        //if (messwerte[i] < 1) continue;
+        //erg = erg + (messwerte[i] << i) ;
+        if (messwerte[i] < 1) erg = erg + (0 << i);
+        else erg = erg + (1 << i);
     }
     return erg;
-}
+} //NIa
 
 /**
  * Sorgt dafür, dass die Messerte in messwerte[] auf dem neusten Stand sind.
@@ -42,7 +46,7 @@ void sensorUpdate()
     {
         if (threshold[i] < 0)
             continue;
-        digitalWrite(control, HIGH);
+        //digitalWrite(control, HIGH);
 
         pinMode(sensors[i], OUTPUT);    //pinModeAll(OUTPUT);
         digitalWrite(sensors[i], HIGH); //digitalWrite(ioLine, HIGH);
@@ -52,10 +56,10 @@ void sensorUpdate()
         delayMicroseconds(threshold[i]); //mehr 0-en => Zahl runter, mehr 1-er => Zahl hoch
 
         messwerte[i] = digitalRead(sensors[i]);
-        digitalWrite(control, LOW);
+        //digitalWrite(control, LOW);
         delayMicroseconds(500);
     }
-    //ausgabe();
+    ausgabe();
     
 }
 
@@ -94,7 +98,7 @@ void sensorSetup()
     sensors[5 - 1] = 17;
     sensors[6 - 1] = 5;
     sensors[7 - 1] = 18;
-    sensors[8 - 1] = 19;
+    sensors[8 - 1] = 35;//19;
     sensors[9 - 1] = 32;
     sensors[10 - 1] = 33;
     sensors[11 - 1] = 25;
@@ -109,21 +113,21 @@ void sensorSetup()
     //callibriereThreshold();
     //int z = 10000;
     threshold[0] = -1;//!
-    threshold[1] = 400;
-    threshold[2] = 440; //!
-    threshold[3] = 350;
-    threshold[4] = 380;
-    threshold[5] = 375;
-    threshold[6] = 435;
-    threshold[7] = 365;
-    threshold[8] = 370;
-    threshold[9] = 375;
-    threshold[10] = 420;
-    threshold[11] = 330;
+    threshold[1] = 330;
+    threshold[2] = 345; //!
+    threshold[3] = 325;
+    threshold[4] = 325;
+    threshold[5] = 325;
+    threshold[6] = 360;
+    threshold[7] = -1;
+    threshold[8] = 360;
+    threshold[9] = 380;
+    threshold[10] = 385;
+    threshold[11] = 340;
     threshold[12] = 330;
-    threshold[13] = 350;
-    threshold[14] = 395;
-    threshold[15] = 435;
+    threshold[13] = 370;
+    threshold[14] = 425;
+    threshold[15] = 495;
     
 }
 
@@ -164,7 +168,7 @@ void callibriereThreshold()
         int testLimit = 4;
         for (int thresholdTry = 0; thresholdTry < 10000; thresholdTry = thresholdTry + steps)
         {
-            digitalWrite(control, HIGH);
+            //digitalWrite(control, HIGH);
 
             pinMode(sensors[i], OUTPUT);    //pinModeAll(OUTPUT);
             digitalWrite(sensors[i], HIGH); //digitalWrite(ioLine, HIGH);
@@ -183,10 +187,10 @@ void callibriereThreshold()
                 supremumThresholds[i] = thresholdTry;
                 break;
             }
-            digitalWrite(control, LOW);
+            //digitalWrite(control, LOW);
             delayMicroseconds(500);
 
-            if (5000 - steps - steps / 2 < thresholdTry)
+            if (10000 - steps - steps / 2 < thresholdTry)
             {
                 Serial.print("Pin");
                 Serial.print(i);
@@ -218,7 +222,7 @@ void callibriereThreshold()
         int testLimit = 4;
         for (int thresholdTry = supremumThresholds[i]; thresholdTry > 0; thresholdTry = thresholdTry - steps)
         {
-            digitalWrite(control, HIGH);
+            //digitalWrite(control, HIGH);
 
             pinMode(sensors[i], OUTPUT);    //pinModeAll(OUTPUT);
             digitalWrite(sensors[i], HIGH); //digitalWrite(ioLine, HIGH);
@@ -235,7 +239,7 @@ void callibriereThreshold()
                 infimumThresholds[i] = thresholdTry;
                 break;
             }
-            digitalWrite(control, LOW);
+            //digitalWrite(control, LOW);
             delayMicroseconds(500);
 
             if (5000 - steps - steps / 2 < thresholdTry)
