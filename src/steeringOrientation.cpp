@@ -4,8 +4,10 @@ int getNumbersOfZeros(uint16_t, int);
 int lastMIddleOfLine = 0;
 bool firstTimeMiddleOfLineIsMessured = true;
 int thresholdForChange = 5;//Wenn MIddleOfLine um mehr als thresholdForChange verschoben werden soll, so wird geblockt.
+int getSteeringAngle(uint16_t);
+
 /**
- * Processes the sensor input into the angle the servo has to adjust to
+ * Gets the positions in as int and gives back pin with higest chance of
  * 
  * @param gets 16 bits long number representing the sensor inputs: 0 = sensor sees white, 
  * 1=sensor sees black
@@ -37,6 +39,7 @@ int abs(int x) {
   return x;
 }
 
+
 int steeringOrientation(uint16_t positions) {
   int middleOfLine = getMiddleOfLine(positions);
 
@@ -47,6 +50,7 @@ int steeringOrientation(uint16_t positions) {
   }
 
   if(abs(middleOfLine - lastMIddleOfLine) < 5){
+    lastMIddleOfLine = middleOfLine;
     return middleOfLine;
   }
 
@@ -64,3 +68,8 @@ int getNumbersOfZeros(uint16_t positions, int i) {
 
 }
 
+
+
+int getSteeringAngle(uint16_t positions) {
+  return (int) map(steeringOrientation(positions),2,15, -35, 35);
+}

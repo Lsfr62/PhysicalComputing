@@ -84,7 +84,7 @@ void drive(){
       drive_forward(180);
     }
   }
-  Serial.println(motor_active);
+  //Serial.println(motor_active);
   //delay(1000);
 }
 
