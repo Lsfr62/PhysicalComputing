@@ -22,11 +22,12 @@ void setup() {
   sensorSetup();
 }
 
+
 void loop() {
+  
   int angle = getSteeringAngle(getSensorData());
-  /*if (angle != 0) {
-    break_vehicle(angle);
-  }*/
+  
+  break_vehicle(angle);
   Serial.print(angle);
   turn_servo(angle);
 

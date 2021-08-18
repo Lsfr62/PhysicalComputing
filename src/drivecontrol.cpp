@@ -39,11 +39,11 @@ int initial_motor(int pinnum1, int pinnum2, int ultnum, int eepnum, int tastenum
 }
 
 void break_vehicle(int rotation_angle) {
-  int break_strength = map(rotation_angle, -35, 35, 50, 200);
-  speed -= break_strength;
-  turn_motor_off();
-  drive_forward(speed);
+  int break_strength = map(abs(rotation_angle), 0, 35, 20, 100);
+  drive_forward(speed - break_strength);
 }
+
+
 
 int turn_motor_off() {
   speed = 0;
@@ -76,14 +76,19 @@ int drive_forward(int value) {
 
 
 void drive(){
-   but_state=digitalRead(but); 
+  but_state = digitalRead(but); 
   if (but_state == HIGH) {
+    delay(500);
     if (can_drive == 0) {
       can_drive = 1;
     } else {
       can_drive = 0;
     }
   }
+  //--------
+
+  //---------
+
   if (can_drive == 0) {
     if (motor_active != 0) {
       turn_motor_off();
@@ -91,7 +96,7 @@ void drive(){
   } else if (can_drive == 1) {
     if (motor_active != 1) {
       //drive_forward(255);
-      drive_forward(180);
+      drive_forward(255);
     }
   }
   //Serial.println(motor_active);
