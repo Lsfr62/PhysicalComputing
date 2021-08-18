@@ -23,25 +23,10 @@ void setup() {
 }
 
 void loop() {
-  //Serial.println();
-  turn_servo(steeringOrientation(getSensorData()));
+  int rotation_angle = steeringOrientation(getSensorData());
+  if (rotation_angle != 0) {
+    break_vehicle(rotation_angle);
+  }
+  turn_servo(rotation_angle);
   drive();
-  //delay(300);
-  //Serial.println((int)getSensorData(), BIN);
-  /*Serial.println("Start");
-  // TEST: Es wird komplett nach links und dann nach Rechts gelenkt
-  for (int i = 0; i < 36; i++) {
-    turn_servo(i);
-    delay(20);
-  }
-
-  for (int i = 0; i > -36; i--) {
-    turn_servo(i);
-    delay(20);
-  }
-  //sensorUpdate();
-  //int x = getSensorData;
-  Serial.println((int)getSensorData(), BIN);
-  Serial.println("Stop");
-  drive()*/
 }
