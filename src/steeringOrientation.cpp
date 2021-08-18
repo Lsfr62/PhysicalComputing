@@ -1,7 +1,9 @@
 #include <Arduino.h>
 int steeringOrientation(uint16_t);
 int getNumbersOfZeros(uint16_t, int);
-
+int lastMIddleOfLine = 0;
+bool firstTimeMiddleOfLineIsMessured = true;
+int thresholdForChange = 5;//Wenn MIddleOfLine um mehr als thresholdForChange verschoben werden soll, so wird geblockt.
 /**
  * Processes the sensor input into the angle the servo has to adjust to
  * 
@@ -9,7 +11,7 @@ int getNumbersOfZeros(uint16_t, int);
  * 1=sensor sees black
  * @return returns an Angle between -35 and 35 that can be given to the servo Motor
 */
-int steeringOrientation(uint16_t positions) {
+int getMiddleOfLine(uint16_t positions) {
   int nullen[16];
   int maxPos = -1;
   int maxNullen = -1;
@@ -26,8 +28,29 @@ int steeringOrientation(uint16_t positions) {
     }
   }
   int middleOfLine = maxPos + nullen[maxPos]/2;
-  return (int) -map(middleOfLine, 2,13, -35, 35 );
- //gelb, rot, rot, orange, gelb, grün, blau, magenta, grau ,lila
+  return middleOfLine;//(int) -map(middleOfLine, 2,13, -35, 35 );
+ 
+}
+
+int abs(int x) {
+  if(x < 0) return -x;
+  return x;
+}
+
+int steeringOrientation(uint16_t positions) {
+  int middleOfLine = getMiddleOfLine(positions);
+
+  if(firstTimeMiddleOfLineIsMessured) {
+    firstTimeMiddleOfLineIsMessured = false;
+    lastMIddleOfLine = middleOfLine;
+    return middleOfLine;
+  }
+
+  if(abs(middleOfLine - lastMIddleOfLine) < 5){
+    return middleOfLine;
+  }
+
+  return lastMIddleOfLine;
 }
 
 
