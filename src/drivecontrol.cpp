@@ -36,6 +36,12 @@ int initial_motor(int pinnum1, int pinnum2, int ultnum, int eepnum, int tastenum
   return 0;
 }
 
+void break_vehicle(int rotation_angle) {
+  int break_strength = map(rotation_angle, -35, 35, 50, 200);
+  speed -= break_strength;
+  turn_motor_off();
+  drive_forward(speed);
+}
 
 int turn_motor_off() {
   motor_active = 0;
