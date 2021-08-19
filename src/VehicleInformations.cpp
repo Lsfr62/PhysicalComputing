@@ -19,17 +19,18 @@
 #define SHIFT_SENSORS(infos, value) (SHIFT(value, 24) | infos)
 
 __uint64_t vehicle_information;
-
 /**
  * @param x is the int value
  * @return an array with the bits if x
 */
-char * showbits(__uint64_t x) {
-    char * buff = (char *) malloc(64); 
+void showbits(__uint64_t x) {
     for (int i = 63; i >= 0; i--) {
-       buff[i] = (x & (1uLL << i) ? '1' : '0');
+        putchar(x & (1uLL << i) ? '1' : '0');
+        if (i % 8 == 0) {
+            putchar(' ');
+        }
     }
-    return buff;
+    putchar('\n');
 }
 
 /**
@@ -43,7 +44,7 @@ char * showbits(__uint64_t x) {
 */
 void refreshInformations(unsigned char lane_change, unsigned char right_angle, unsigned char right_left_curve, 
                          int rotation_angle, unsigned int speed, __uint16_t sensors) {
-
+    vehicle_information = 0;
     vehicle_information = SHIFT_LANE_CHANGE(vehicle_information, lane_change);
     vehicle_information = SHIFT_RIGHT_ANGLE(vehicle_information, right_angle);
     vehicle_information = SHIFT_RIGHT_CURVE(vehicle_information, right_left_curve);
@@ -54,3 +55,4 @@ void refreshInformations(unsigned char lane_change, unsigned char right_angle, u
     
     // showbits(vehicle_information);
 }
+
