@@ -15,16 +15,23 @@
 
 void setup() {
   Serial.begin(115200);
-  initial_motor(4, 0, 16, 17,34);
-  initialize_servo(15);
-  pinMode(13, OUTPUT);  // TODO ist das wichtig?
+  initial_motor(15, 21, 22, 23,34);
+  initialize_servo(19);
+  //pinMode(13, OUTPUT);  // TODO ist das wichtig?
   //Serial.println("B");
   sensorSetup();
 }
 
+
 void loop() {
-  //Serial.println();
-  turn_servo(steeringOrientation(getSensorData()));
+  
+  int angle = getSteeringAngle(getSensorData());
+  
+  break_vehicle(angle);
+  Serial.print(angle);
+  turn_servo(angle);
+
+  drive();
   //delay(300);
   //Serial.println((int)getSensorData(), BIN);
   /*Serial.println("Start");
@@ -37,10 +44,10 @@ void loop() {
   for (int i = 0; i > -36; i--) {
     turn_servo(i);
     delay(20);
+  int rotation_angle = steeringOrientation(getSensorData());
+  if (rotation_angle != 0) {
+    break_vehicle(rotation_angle);
   }
-  //sensorUpdate();
-  //int x = getSensorData;
-  Serial.println((int)getSensorData(), BIN);
-  Serial.println("Stop");
-  drive()
+  turn_servo(rotation_angle);
+  drive(); */
 }
