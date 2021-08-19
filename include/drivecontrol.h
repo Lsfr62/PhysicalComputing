@@ -8,4 +8,6 @@ int drive_forward(int value);
 int drive_backward(int value);
 int turn_motor_off();
 void drive();
+
+extern int speed;
 // #endif //DRIVECONTROL_H

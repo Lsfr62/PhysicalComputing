@@ -24,7 +24,10 @@ void setup() {
 }
 
 void loop() {
-  turn_servo(steeringOrientation(getSensorData()));
+  uint16_t sensorData = getSensorData();
+  int rotationAngle = steeringOrientation(sensorData);
+  turn_servo(rotationAngle);
   drive();
-  refreshInformations('Y', 'Y', 'R', -35, 255, 54613);
+  // TODO: lane change and right angle should be changed
+  refreshInformations('Y', 'Y', (rotationAngle < 0 ? 'L' : 'R'), rotationAngle, speed, sensorData);
 }

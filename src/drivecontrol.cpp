@@ -4,7 +4,7 @@ int pin1, pin2, ult, eep,but;
 int motor_active = 0;
 int but_state = 0;
 int can_drive = 0;
-
+int speed = 0;
 
 /**
  *#pin1 the first input for the motor with the pin(4) and the AttachPin(15)
@@ -38,6 +38,7 @@ int initial_motor(int pinnum1, int pinnum2, int ultnum, int eepnum, int tastenum
 
 
 int turn_motor_off() {
+  speed = 0;
   motor_active = 0;
   ledcWrite(15, LOW);
   ledcWrite(16, LOW);
@@ -55,18 +56,19 @@ int drive_forward(int value) {
  * read the button, and when it is high change the button_activ from high to low or from low to high
  * then when the butt
  * */
-    if  (value < 150 || value > 255) {
-      value = 255;
-    }
-    ledcWrite(15,value);
-    digitalWrite(pin2, LOW);
+  if  (value < 150 || value > 255) {
+    value = 255;
+  }
+  ledcWrite(15,value);
+  digitalWrite(pin2, LOW);
+  speed = value;
   return 0;
 }
 
 
 
 void drive(){
-   but_state=digitalRead(but); 
+  but_state = digitalRead(but); 
   if (but_state == HIGH) {
     if (can_drive == 0) {
       can_drive = 1;
@@ -83,8 +85,6 @@ void drive(){
       drive_forward(255);
     }
   }
-  Serial.println(motor_active);
-  delay(1000);
 }
 
 /**
@@ -92,10 +92,9 @@ void drive(){
  */
 int drive_backward(int value) {
  
- if  (value < 150 || value > 255)
-  {
+ if  (value < 150 || value > 255) {
     value = 255;
-      }
+  }
   ledcWrite(16,value);
   digitalWrite(pin1, LOW);
   digitalWrite(ult, HIGH);
