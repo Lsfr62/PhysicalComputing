@@ -1,58 +1,75 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* the right shift operation is used to set the bits */
-#define SHIFT(info, bits) (((__uint64_t) info) << bits)
-/* the last/64th bit is used for the lane change value => 1 if there is a lane change, otherwise 0 */
-#define SHIFT_LANE_CHANGE(infos, c) (c == 'Y' ? (SHIFT(1, 63) | (infos)) : infos)
-/* the 63th bit is used for the right angle => 1 if there is a right angle, otherwise 0*/
-#define SHIFT_RIGHT_ANGLE(infos, c) (c == 'Y' ? (SHIFT(1, 62) | (infos)) : infos)
-/* the 62th bit is used for the right/left curve => 1 if the it is a right curve, 0 if it is a left one */
-#define SHIFT_RIGHT_CURVE(infos, c) (c == 'R' ? (SHIFT(1, 61) | (infos)) : infos)  
-/* the 56th bit is used for the sign of the rotation angle => 1 if it is minus, 0 if positive */
-#define SHIFT_SIGN(value) (value < 0 ? SHIFT(1, 55) : 0)
-/* the bits 55-49 are used for the rotation angle */
-#define SHIFT_ROTATION_ANGLE(infos, angle) ((angle < 0 ? SHIFT(-1 * angle, 48) : SHIFT(angle, 48)) | infos)
-/* the bits 48-41 are used for the speed */
-#define SHIFT_SPEED(infos, value) (SHIFT(value, 40) | infos)
-/* the bits 40-25 are used for the sensors */
-#define SHIFT_SENSORS(infos, value) (SHIFT(value, 24) | infos)
+#define SHIFT8(info, bits) ((__uint8_t) info << bits)
+#define SHIFT16(info, bits) ((__uint16_t) info << bits)
+#define SHIFT16R(info, bits) ((__uint16_t) info >> bits)
+#define GET_FIRST_8_BITS(info) SHIFT16R((info & ~SHIFT16(255, 0)), 8)
+#define GET_LAST_8_BITS(info) (info & SHIFT16(255, 0))
+#define GET_SIGN(info) (((__uint8_t) info) >> 7)
+#define GET_SPEED(info) (((__uint8_t) info) & ~(1 << 7))
+
+#define MAX_16_Bits 65535
+#define MAX_8_Bits 255
 
 __uint64_t vehicle_information;
+
 /**
  * @param x is the int value
  * @return an array with the bits if x
 */
-void showbits(__uint64_t x) {
-    for (int i = 63; i >= 0; i--) {
-        putchar(x & (1uLL << i) ? '1' : '0');
-        if (i % 8 == 0) {
+void showbits(unsigned int x, int bitsnum) {
+    for (int i = bitsnum - 1; i >= 0; i--) {
+        putchar(x & (1 << i) ? '1' : '0');
+        if (i % 4 == 0) {
             putchar(' ');
         }
     }
     putchar('\n');
 }
 
-/**
- * @param lane_change the lane should be changed, value: 'Y', 'N'
- * @param right_angle a right curve is comming, value: 'Y', 'N'
- * @param right_left_curve the curve is goning right or left, value: 'R', 'L'
- * @param rotation_angle the angle, the servo is rotated
- * @param speed the speed of the vehicle
- * @param sensors an int of 16 bits
- * In this functions are the informations of the vehicle saved into a 64-bit int. Only the last 48 bits are used
-*/
-void refreshInformations(unsigned char lane_change, unsigned char right_angle, unsigned char right_left_curve, 
-                         int rotation_angle, unsigned int speed, __uint16_t sensors) {
-    vehicle_information = 0;
-    vehicle_information = SHIFT_LANE_CHANGE(vehicle_information, lane_change);
-    vehicle_information = SHIFT_RIGHT_ANGLE(vehicle_information, right_angle);
-    vehicle_information = SHIFT_RIGHT_CURVE(vehicle_information, right_left_curve);
-    vehicle_information = SHIFT_SIGN(rotation_angle) | vehicle_information;
-    vehicle_information = SHIFT_ROTATION_ANGLE(vehicle_information, rotation_angle);
-    vehicle_information = SHIFT_SPEED(vehicle_information, speed);
-    vehicle_information = SHIFT_SENSORS(vehicle_information, sensors);
-    
-    // showbits(vehicle_information);
+int translateValues(__uint16_t interface) {
+    if (interface > MAX_16_Bits) {
+        return 0;
+    }
+
+    unsigned int firstBits = GET_FIRST_8_BITS(interface);
+    int angle = GET_SPEED(firstBits) * (GET_SIGN(firstBits) == 1 ? -1 : 1);
+    // turn_survo(angle);
+
+    int speed = GET_LAST_8_BITS(interface);
+    // drive_forward(speed);
+    return 1;
 }
 
+__uint8_t getLaneInfos(unsigned char lane_change, unsigned char right_angle, unsigned char r_l_curve) {
+    __uint8_t result;
+
+    result  = lane_change == 'Y' || lane_change == 'y' ? SHIFT8(1, 7) : 0;
+    result |= right_angle == 'Y' || right_angle == 'y' ? SHIFT8(1, 6) : 0;
+    result |= r_l_curve   == 'R' || r_l_curve   == 'r' ? SHIFT8(1, 5) : 0;
+    
+    return result;
+}
+
+__uint8_t getSpeed(unsigned int speed) {
+    return speed > 0 && speed <= MAX_8_Bits ? (__uint8_t) speed : 0;
+}
+
+__uint8_t getAngle(int rotation) {
+    __uint8_t result;
+
+    if (rotation < -35) {
+        rotation = -35;
+    } else if (rotation > 35) {
+        rotation = 35;
+    }
+
+    result = rotation < 0 ? SHIFT8(1, 7) : 0;
+    result |= abs(rotation);
+    return result;
+}
+
+__uint16_t getSensors(__uint16_t sensors) {
+    return sensors <= MAX_16_Bits ? sensors : 0;
+}

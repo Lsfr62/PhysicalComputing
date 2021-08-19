@@ -4,9 +4,11 @@
 #pragma once
 #include <stdlib.h>
 
-void showbits(__uint64_t x);
-void refreshInformations(unsigned char lane_change, unsigned char right_angle, unsigned char right_left_curve, 
-                         int rotation_angle, unsigned int speed, __uint16_t sensors);
+int translateValues(__uint16_t interface);
+__uint8_t getLaneInfos(unsigned char lane_change, unsigned char right_angle, unsigned char r_l_curve);
+__uint8_t getSpeed(unsigned int speed);
+__uint8_t getAngle(int rotation);
+__uint16_t getSensors(__uint16_t sensors);
 
 extern __uint64_t vehicle_information;
 
