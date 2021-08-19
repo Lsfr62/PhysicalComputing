@@ -16,16 +16,18 @@
 
 void setup() {
   Serial.begin(115200);
-  initial_motor(4, 0, 16, 17,34);
-  initialize_servo(15);
-  pinMode(13, OUTPUT);  // TODO ist das wichtig?
+  initial_motor(15, 21, 22, 23,34);
+  initialize_servo(19);
+  //pinMode(13, OUTPUT);  // TODO ist das wichtig?
   //Serial.println("B");
   sensorSetup();
 }
 
+
 void loop() {
   uint16_t sensorData = getSensorData();
   int rotationAngle = steeringOrientation(sensorData);
+  break_vehicle(angle);
   turn_servo(rotationAngle);
   drive();
   // TODO: lane change and right angle should be changed

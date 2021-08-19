@@ -2,13 +2,16 @@
 //TODO Werte in Speicher speichern und kallibrierung skippen
 const int numberOfSensors = 16;
 int sensors[numberOfSensors];
+//int steckplatzZuPinNummerRechts[19]; // z.B. der 5. Steckplatz auf dem Board ist Pin 2, also wäre steckplatzZuPinNummer[5] == 2
+//int steckplatzZuPinNummerLinks[19]; 
 int messwerte[numberOfSensors];
 int threshold[numberOfSensors]; //jeder Sensr braucht einen individuellen Wert, um beste Ergebnisse zu bringen
-int control = 13;
+//int control = 15; // Ist der VCC Anschluss
 void ausgabe();
 void callibriereThreshold();
 void waitTillEnter();
 void sensorUpdate();
+void sensorSetup();
 
 /**
  * Ruft Daten von Sensoren ab
@@ -22,13 +25,17 @@ void sensorUpdate();
 */
 uint16_t getSensorData() {
     sensorUpdate();
+
     int16_t erg = 0;
+
     for(int i = 0; i < numberOfSensors; i++) {
-        if (sensors[i] < 0) continue;
-        erg = erg + (messwerte[i] << i) ;
+        //if (messwerte[i] < 1) continue;
+        //erg = erg + (messwerte[i] << i) ;
+        if (messwerte[i] < 1) erg = erg + (0 << i);
+        else erg = erg + (1 << i);
     }
     return erg;
-}
+} //NIa
 
 /**
  * Sorgt dafür, dass die Messerte in messwerte[] auf dem neusten Stand sind.
@@ -39,7 +46,7 @@ void sensorUpdate()
     {
         if (threshold[i] < 0)
             continue;
-        digitalWrite(control, HIGH);
+        //digitalWrite(control, HIGH);
 
         pinMode(sensors[i], OUTPUT);    //pinModeAll(OUTPUT);
         digitalWrite(sensors[i], HIGH); //digitalWrite(ioLine, HIGH);
@@ -49,7 +56,7 @@ void sensorUpdate()
         delayMicroseconds(threshold[i]); //mehr 0-en => Zahl runter, mehr 1-er => Zahl hoch
 
         messwerte[i] = digitalRead(sensors[i]);
-        digitalWrite(control, LOW);
+        //digitalWrite(control, LOW);
         delayMicroseconds(500);
     }
     ausgabe();
@@ -65,6 +72,7 @@ void sensorSetup()
         messwerte[i] = -1;
         threshold[i] = -1;
     }
+
     /*
     sensors[1 - 1] = 5;
     //sensors[2 - 1] = 14;
@@ -83,35 +91,43 @@ void sensorSetup()
     sensors[15 - 1] = 12;
     //sensors[(16 - 1)] = 7;
     */
-   sensors[1 - 1] = 27;
-    //sensors[2 - 1] = 14;
-    sensors[3 - 1] = 2; 
-    //sensors[4 - 1] = 27;
-    sensors[5 - 1] = 12;
-    //sensors[6 - 1] = 26;
+    sensors[1 - 1] = 0;
+    sensors[2 - 1] = 2;
+    sensors[3 - 1] = 4; 
+    sensors[4 - 1] = 16;
+    sensors[5 - 1] = 17;
+    sensors[6 - 1] = 5;
     sensors[7 - 1] = 18;
-    //sensors[8 - 1] = 25;
-    sensors[9 - 1] = 19;
-    //sensors[10 - 1] = 33;
-    sensors[11 - 1] = 26;
-    //sensors[12 - 1] = 32;
-    sensors[13 - 1] = 5;
-    //sensors[14 - 1] = 8;
-    sensors[15 - 1] = 21;
-    //sensors[(16 - 1)] = 7;
-    
-
-    //zu viele 0-en => Zahl runter, zu viele  1-er => Zahl hoch
+    sensors[8 - 1] = 35;//19;
+    sensors[9 - 1] = 32;
+    sensors[10 - 1] = 33;
+    sensors[11 - 1] = 25;
+    sensors[12 - 1] = 26;
+    sensors[13 - 1] = 27;
+    sensors[14 - 1] = 14;
+    sensors[15 - 1] = 12;
+    sensors[(16 - 1)] = 13;
+ //zu viele 0-en => Zahl runter, zu viele  1-er => Zahl hoch
 
     //RC Kit Beschreibzung soll in Doc!
     //callibriereThreshold();
-    threshold[0] = 1160;
-    threshold[2] = 610;
-    threshold[4] = 1030;
-    threshold[6] = 1135;
-    threshold[8] = 1010;
-    threshold[10] = 1090;
-    threshold[12] = 1030;
+    //int z = 10000;
+    threshold[0] = -1;//!
+    threshold[1] = 330;
+    threshold[2] = 345; //!
+    threshold[3] = 325;
+    threshold[4] = 325;
+    threshold[5] = 325;
+    threshold[6] = 360;
+    threshold[7] = -1;
+    threshold[8] = 360;
+    threshold[9] = 380;
+    threshold[10] = 385;
+    threshold[11] = 340;
+    threshold[12] = 330;
+    threshold[13] = 370;
+    threshold[14] = 425;
+    threshold[15] = 495;
     
 }
 
@@ -146,22 +162,23 @@ void callibriereThreshold()
     Serial.println("Kallibriere Schwartz...");
     for (int i = 0; i < numberOfSensors; i++)
     {
-        if (sensors[i] < 0)
-            continue;
-        int steps = 10;
+        if (sensors[i] < 0) continue;
+        int steps = 10; //10
         int triggerLimit = 0;
         int testLimit = 4;
-        for (int thresholdTry = 0; thresholdTry < 5000; thresholdTry = thresholdTry + steps)
+        for (int thresholdTry = 0; thresholdTry < 10000; thresholdTry = thresholdTry + steps)
         {
-            digitalWrite(control, HIGH);
+            //digitalWrite(control, HIGH);
 
             pinMode(sensors[i], OUTPUT);    //pinModeAll(OUTPUT);
             digitalWrite(sensors[i], HIGH); //digitalWrite(ioLine, HIGH);
             delayMicroseconds(15);
             pinMode(sensors[i], INPUT);      //pinMode(ioLine, INPUT);
             delayMicroseconds(thresholdTry); //mehr 0-en => Zahl runter, mehr 1-er => Zahl hoch
-            if (digitalRead(sensors[i]) == 0)
+            if (digitalRead(sensors[i]) == 0){
                 triggerLimit++;
+                //steps = steps/2;
+            }
 
             if (digitalRead(sensors[i]) == 1)
                 triggerLimit = 0;
@@ -170,10 +187,10 @@ void callibriereThreshold()
                 supremumThresholds[i] = thresholdTry;
                 break;
             }
-            digitalWrite(control, LOW);
+            //digitalWrite(control, LOW);
             delayMicroseconds(500);
 
-            if (5000 - steps - steps / 2 < thresholdTry)
+            if (10000 - steps - steps / 2 < thresholdTry)
             {
                 Serial.print("Pin");
                 Serial.print(i);
@@ -205,7 +222,7 @@ void callibriereThreshold()
         int testLimit = 4;
         for (int thresholdTry = supremumThresholds[i]; thresholdTry > 0; thresholdTry = thresholdTry - steps)
         {
-            digitalWrite(control, HIGH);
+            //digitalWrite(control, HIGH);
 
             pinMode(sensors[i], OUTPUT);    //pinModeAll(OUTPUT);
             digitalWrite(sensors[i], HIGH); //digitalWrite(ioLine, HIGH);
@@ -222,7 +239,7 @@ void callibriereThreshold()
                 infimumThresholds[i] = thresholdTry;
                 break;
             }
-            digitalWrite(control, LOW);
+            //digitalWrite(control, LOW);
             delayMicroseconds(500);
 
             if (5000 - steps - steps / 2 < thresholdTry)
@@ -276,7 +293,7 @@ void ausgabe()
 {
     for (int i = 0; i < numberOfSensors; i++)
     {
-        if (sensors[i] < 0)
+        if (sensors[i] < 0 || threshold[i] < 0)
         {
             Serial.print(" ");
             continue;

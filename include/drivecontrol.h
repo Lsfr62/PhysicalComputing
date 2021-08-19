@@ -8,6 +8,5 @@ int drive_forward(int value);
 int drive_backward(int value);
 int turn_motor_off();
 void drive();
-
-extern int speed;
+void break_vehicle(int rotation_angle);
 // #endif //DRIVECONTROL_H
