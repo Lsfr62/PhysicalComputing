@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <steeringOrientation.h>
 //TODO Werte in Speicher speichern und kallibrierung skippen
 const int numberOfSensors = 16;
 int sensors[numberOfSensors];
@@ -12,7 +13,11 @@ void callibriereThreshold();
 void waitTillEnter();
 void sensorUpdate();
 void sensorSetup();
-
+bool isIn(int, int, int);
+uint16_t getSensorData();
+int counterSinceLastOrthogonalLineLeft = -1; //Es werden immer zwei Querlienien hinterinenander abgefahren. Um die Zeit dazwischen zu messen, wird dieser Counter eingeführt
+int counterSinceLastOrthogonalLineRight = -1; //Es werden immer zwei Querlienien hinterinenander abgefahren. Um die Zeit dazwischen zu messen, wird dieser Counter eingeführt
+int counterSinceLastOrthogonalLine = -1; //Es werden immer zwei Querlienien hinterinenander abgefahren. Um die Zeit dazwischen zu messen, wird dieser Counter eingeführt
 /**
  * Ruft Daten von Sensoren ab
  * 
@@ -59,7 +64,7 @@ void sensorUpdate()
         //digitalWrite(control, LOW);
         delayMicroseconds(500);
     }
-    ausgabe();
+    //ausgabe();
     
 }
 
@@ -113,21 +118,21 @@ void sensorSetup()
     //callibriereThreshold();
     //int z = 10000;
     threshold[0] = -1;//!
-    threshold[1] = 330;
-    threshold[2] = 345; //!
+    threshold[1] = 390;
+    threshold[2] = 530;//345; //!
     threshold[3] = 325;
-    threshold[4] = 325;
-    threshold[5] = 325;
-    threshold[6] = 360;
+    threshold[4] = 365;
+    threshold[5] = 380;
+    threshold[6] = 480;//360;
     threshold[7] = -1;
-    threshold[8] = 360;
+    threshold[8] = 420;//360;
     threshold[9] = 380;
-    threshold[10] = 385;
-    threshold[11] = 340;
-    threshold[12] = 330;
-    threshold[13] = 370;
-    threshold[14] = 425;
-    threshold[15] = 495;
+    threshold[10] = 510;//385;
+    threshold[11] = 420;//340;
+    threshold[12] = 425;//330;
+    threshold[13] = 455;//370;
+    threshold[14] = 555;//425;
+    threshold[15] = 710;//495;
     
 }
 
@@ -315,3 +320,96 @@ void waitTillEnter()
     while (!Serial.available());
     Serial.readStringUntil('\n');
 }
+
+/**
+ * Überfprüft, ob Sensor eine ganze Querlieie sieht. Mit den Parametern left und right kann eingestellt werrden welcher Teil vom Sensor geprüft werden soll.
+ * Ist wichtig für Spezielle Fahrbahnmarkierungen die 90 Grad Kurve oder Fahrbahnwechsel anzeigen.
+ * 
+ * @param left (L) und right (R) sind entweder 0 oder 1. L=1,R=0 => Nur linker Teil von Streiefn wird geprüft. L=1,R=1 => Ganzer Streifen wird überprüft, L=0,R=1 => Nur rechter teil von Streifen wird überprüft
+ * 
+ * @return Gibt bool zuruück, ob an der mit left und right ausgewählten Stelle ein Querstreifen erkannt wurde
+*/
+bool checkPinsInRange(int left, int right){
+    /*int numberOfWhite = 0;
+    uint16_t pinOutput = getSensorData();
+    pinOutput = ~pinOutput;
+    //if(getLastMiddleOfLine() <= 6 || getLastMiddleOfLine()== 10) return false;
+    for(int i = (numberOfSensors/2) * right; i < (numberOfSensors / (1 + left)); i++) {
+        if(pinOutput & (1 << (i))) numberOfWhite++;
+    }
+    int threshold = 1;
+    return ((numberOfWhite + threshold) >= (numberOfSensors/(abs(right - left) + 1)));
+    */
+    int numberOfWhite = 0;
+    uint16_t pinOutput = getSensorData();
+    pinOutput = ~pinOutput;
+    for(int i = right * ((int)(numberOfSensors * 0.32)); i < (left ? ((int)(numberOfSensors*0.68)) : numberOfSensors); i++) {
+        if(pinOutput & (1 << (i))) numberOfWhite++;
+    }
+    int threshold = 2;
+    return ((numberOfWhite + threshold) >= (int)(numberOfSensors*0.6));//(numberOfSensors/(abs(right - left) + 1)));
+}
+
+/**
+ * Gibt wahrhetswert zurück, ob ein Querstreifen auf der ganzen Fahrbahn erkannt wurde
+ * 
+ * @return Wenn Ein zur Fahrbahn orthogonaler Streifen über der ganzen Bahn liegt soll true zurück kommen.
+*/
+bool fullLine() {
+    counterSinceLastOrthogonalLine++;
+    if(checkPinsInRange(1,0) && checkPinsInRange(0,1)) {
+        if(isIn(counterSinceLastOrthogonalLine,5,10) ) {
+            counterSinceLastOrthogonalLine = -1;
+            return true;
+        }
+        counterSinceLastOrthogonalLine = -1;
+    }
+    return false;
+
+    return 
+}
+
+/**
+ * Gibt wahrhetswert zurück, ob ein Querstreifen auf der rechten Fahrbahnhälft erkannt wurde
+ * 
+ * @return Wenn Ein zur Fahrbahn orthogonaler Streifen über der rechten Seite der Bahn liegt soll true zurück kommen.
+*/
+bool halfLineRight() {
+    counterSinceLastOrthogonalLineRight++;
+    if(checkPinsInRange(0,1) && !checkPinsInRange(1,0) ) {
+        if(isIn(counterSinceLastOrthogonalLineRight,5,10) ) {
+            counterSinceLastOrthogonalLineRight = -1;
+            return true;
+        }
+        counterSinceLastOrthogonalLineRight = -1;
+        //return true;
+    }
+    return false;
+    
+}
+
+/**
+ * Gibt wahrhetswert zurück, ob ein Querstreifen auf der linken Fahrbahnhälft erkannt wurde
+ * 
+ * @return Wenn Ein zur Fahrbahn orthogonaler Streifen über der linken Seite der Bahn liegt soll true zurück kommen.
+*/
+bool halfLineLeft() {
+    counterSinceLastOrthogonalLineLeft++;
+    if(checkPinsInRange(1,0) && !checkPinsInRange(0,1) ) {
+        if(isIn(counterSinceLastOrthogonalLineLeft,5,10) ) {
+            counterSinceLastOrthogonalLineLeft = -1;
+            return true;
+        }
+        counterSinceLastOrthogonalLineLeft = -1;
+    }
+    return false;
+}
+
+bool isIn(int x, int a, int b) {
+    return a <= x && x <= b;
+}
+
+
+
+
+

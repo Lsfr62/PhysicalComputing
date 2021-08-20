@@ -14,8 +14,8 @@ int getSteeringAngle(uint16_t);
  * @return returns an Angle between -35 and 35 that can be given to the servo Motor
 */
 int getMiddleOfLine(uint16_t positions) {
-  Serial.print(positions, BIN);
-  Serial.print(" ");
+  //Serial.print(positions, BIN);
+  //Serial.print(" ");
   int nullen[16];
   int maxPos = -1;
   int maxNullen = -1;
@@ -36,6 +36,10 @@ int getMiddleOfLine(uint16_t positions) {
  
 }
 
+int getLastMiddleOfLine(){
+  return lastMIddleOfLine;
+}
+
 int abs(int x) {
   if(x < 0) return -x;
   return x;
@@ -45,7 +49,7 @@ int abs(int x) {
 int steeringOrientation(uint16_t positions) {
   int middleOfLine = getMiddleOfLine(positions);
 
-  /*if(firstTimeMiddleOfLineIsMessured) {
+  if(firstTimeMiddleOfLineIsMessured) { //initialisierung beim ersten durchlauf
     firstTimeMiddleOfLineIsMessured = false;
     lastMIddleOfLine = middleOfLine;
     return middleOfLine;
@@ -56,8 +60,8 @@ int steeringOrientation(uint16_t positions) {
     return middleOfLine;
   }
 
-  return lastMIddleOfLine;*/
-  return middleOfLine;
+  return lastMIddleOfLine;
+  //return middleOfLine;
 }
 
 
@@ -75,8 +79,8 @@ int getNumbersOfZeros(uint16_t positions, int i) {
 
 int getSteeringAngle(uint16_t positions) {
   int erg = steeringOrientation(positions);
-  Serial.print(" ");
+  /*Serial.print(" ");
   Serial.print(erg);
-  Serial.print(" ");
-  return (int) -map(erg,5,14, -35, 35);
+  Serial.print(" ");*/
+  return (int) -map(erg, 5, 14, -35, 35);
 }
