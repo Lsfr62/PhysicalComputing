@@ -96,7 +96,7 @@ void drive(){
   } else if (can_drive == 1) {
     if (motor_active != 1) {
       //drive_forward(255);
-      drive_forward(255);
+      drive_forward(200);
     }
   }
   //Serial.println(motor_active);
