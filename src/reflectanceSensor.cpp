@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <EEPROM.h>
 #include <steeringOrientation.h>
 //TODO Werte in Speicher speichern und kallibrierung skippen
 const int numberOfSensors = 16;
@@ -13,6 +14,8 @@ void callibriereThreshold();
 void waitTillEnter();
 void sensorUpdate();
 void sensorSetup();
+void saveThresholdsToROM();
+void readThresholdsFromROM();
 bool isIn(int, int, int);
 uint16_t getSensorData();
 int counterSinceLastOrthogonalLineLeft = -1; //Es werden immer zwei Querlienien hinterinenander abgefahren. Um die Zeit dazwischen zu messen, wird dieser Counter eingeführt
@@ -49,7 +52,7 @@ void sensorUpdate()
 {
     for (int i = 0; i < numberOfSensors; i++)
     {
-        if (threshold[i] < 0)
+        if (threshold[i] <= 0)
             continue;
         //digitalWrite(control, HIGH);
 
@@ -71,6 +74,14 @@ void sensorUpdate()
 
 void sensorSetup()
 {
+    EEPROM.begin(numberOfSensors);
+    
+    for(int i = 0; i < numberOfSensors; i ++) {
+        Serial.print(i);
+        Serial.print(":");
+        Serial.print(EEPROM.read(i));
+        Serial.println(" ");
+    }
     for (int i = 0; i < numberOfSensors; i++)
     {
         sensors[i] = -1;
@@ -117,6 +128,9 @@ void sensorSetup()
     //RC Kit Beschreibzung soll in Doc!
     //callibriereThreshold();
     //int z = 10000;
+    readThresholdsFromROM();
+    
+    /*
     threshold[0] = -1;//!
     threshold[1] = 390;
     threshold[2] = 530;//345; //!
@@ -133,6 +147,7 @@ void sensorSetup()
     threshold[13] = 455;//370;
     threshold[14] = 555;//425;
     threshold[15] = 710;//495;
+    */
     
 }
 
@@ -282,8 +297,19 @@ void callibriereThreshold()
         Serial.print(threshold[i]);
         Serial.print(", ");
     }
+    saveThresholdsToROM();
+    Serial.println("\nIm ROM Speicher: ------------------");
+    for(int i = 0; i < numberOfSensors; i ++) {
+        Serial.print(i);
+        Serial.print(":");
+        Serial.print(EEPROM.read(i));
+        Serial.println(" ");
+    }
+    readThresholdsFromROM();
+    
     waitTillEnter();
     //while(true);
+
 }
 
 /**
@@ -298,7 +324,7 @@ void ausgabe()
 {
     for (int i = 0; i < numberOfSensors; i++)
     {
-        if (sensors[i] < 0 || threshold[i] < 0)
+        if (sensors[i] < 0 || threshold[i] <= 0)
         {
             Serial.print(" ");
             continue;
@@ -357,8 +383,9 @@ bool checkPinsInRange(int left, int right){
 */
 bool fullLine() {
     counterSinceLastOrthogonalLine++;
+    //Serial.println(counterSinceLastOrthogonalLine);
     if(checkPinsInRange(1,0) && checkPinsInRange(0,1)) {
-        if(isIn(counterSinceLastOrthogonalLine,5,10) ) {
+        if(isIn(counterSinceLastOrthogonalLine,1,10) ) {
             counterSinceLastOrthogonalLine = -1;
             return true;
         }
@@ -366,7 +393,6 @@ bool fullLine() {
     }
     return false;
 
-    return 
 }
 
 /**
@@ -377,7 +403,7 @@ bool fullLine() {
 bool halfLineRight() {
     counterSinceLastOrthogonalLineRight++;
     if(checkPinsInRange(0,1) && !checkPinsInRange(1,0) ) {
-        if(isIn(counterSinceLastOrthogonalLineRight,5,10) ) {
+        if(isIn(counterSinceLastOrthogonalLineRight,1,10) ) {
             counterSinceLastOrthogonalLineRight = -1;
             return true;
         }
@@ -396,7 +422,7 @@ bool halfLineRight() {
 bool halfLineLeft() {
     counterSinceLastOrthogonalLineLeft++;
     if(checkPinsInRange(1,0) && !checkPinsInRange(0,1) ) {
-        if(isIn(counterSinceLastOrthogonalLineLeft,5,10) ) {
+        if(isIn(counterSinceLastOrthogonalLineLeft,1,10) ) {
             counterSinceLastOrthogonalLineLeft = -1;
             return true;
         }
@@ -409,6 +435,28 @@ bool isIn(int x, int a, int b) {
     return a <= x && x <= b;
 }
 
+void saveThresholdsToROM() {
+    
+    for(int i = 0; i < numberOfSensors; i++) {
+        //if(threshold[i] <= 0) continue;
+        EEPROM.write(i, (threshold[i] / 10));
+        EEPROM.commit();
+
+    }
+    Serial.println("\nDone with saving. Gespeicherte Werte:");
+    for(int i = 0; i < numberOfSensors; i ++) {
+        Serial.print(i);
+        Serial.print(":");
+        Serial.print(EEPROM.read(i));
+        Serial.println(" ");
+    }
+}
+
+void readThresholdsFromROM() {
+    for(int i = 0; i < numberOfSensors; i++) {
+        threshold[i] = EEPROM.read(i) * 10;
+    }
+}
 
 
 

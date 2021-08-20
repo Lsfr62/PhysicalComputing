@@ -6,3 +6,4 @@ uint16_t getSensorData();
 bool halfLineLeft();
 bool halfLineRight();
 bool fullLine();
+void callibriereThreshold();

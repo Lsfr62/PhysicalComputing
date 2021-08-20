@@ -9,6 +9,7 @@
 #include <steeringControl.h>
 #include <reflectanceSensor.h>
 #include <steeringOrientation.h>
+#include <EEPROM.h>
 
 // Set LED_BUILTIN if it is not defined by Arduino framework
 // #define LED_BUILTIN 2
@@ -20,29 +21,38 @@ void setup() {
   sensorSetup();
 }
 
-
+bool taste = false;
 void loop() {
   
+  
   int angle = getSteeringAngle(getSensorData());
+  //Serial.println(angle);
+  if(Serial.available()){
+    String s = Serial.readStringUntil('\n'); 
+    taste = !taste;
+    }
+  if(taste) {
+    callibriereThreshold();
+    taste = false;
+    }
+    
   
   //break_vehicle(angle);
   //Serial.print(angle);
-  bool fl = fullLine();
-  bool hll = halfLineLeft();
-  bool hlr = halfLineRight();
   
-  Serial.print(~getSensorData() + (1 << 17), BIN);
+  /*Serial.print(~getSensorData() + (1 << 17), BIN);
   Serial.print(" ");
   Serial.print(getLastMiddleOfLine());
-  Serial.print(" ");
+  Serial.print(" ");*/
 
-  if(fl) Serial.println("G");
-  else if(hlr) Serial.println("R");
-  else if(hll) Serial.println("L");
+  if(fullLine()) Serial.println("G");
+  else if(halfLineLeft()) Serial.println("R");
+  else if(halfLineRight()) Serial.println("L");
   else Serial.println(" ");
-  //turn_servo(angle);
+ 
+  turn_servo(angle);
 
-  //drive();
+  drive();
 
 
 
