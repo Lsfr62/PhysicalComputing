@@ -29,5 +29,4 @@ void loop() {
   int rotationAngle = steeringOrientation(sensorData);
   // break_vehicle(rotationAngle);
   turn_servo(rotationAngle);
-  drive();
 }

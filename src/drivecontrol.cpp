@@ -69,8 +69,8 @@ int drive_forward(int value) {
     value = 255;
   }
   speed = value;
-    ledcWrite(15,value);
-    digitalWrite(pin2, LOW);
+  ledcWrite(15,value);
+  digitalWrite(pin2, LOW);
   return 0;
 }
 

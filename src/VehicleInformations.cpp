@@ -14,7 +14,6 @@
 #define MAX_16_Bits 65535
 #define MAX_8_Bits 255
 
-__uint64_t vehicle_information;
 
 /**
  * @param x is the int value
