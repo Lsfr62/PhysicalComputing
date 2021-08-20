@@ -27,7 +27,7 @@ void loop() {
   
   int angle = getSteeringAngle(getSensorData());
   
-  break_vehicle(angle);
+ // break_vehicle(angle);
   Serial.print(angle);
   turn_servo(angle);
 
