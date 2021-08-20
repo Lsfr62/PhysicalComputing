@@ -46,8 +46,8 @@ void loop() {
   Serial.print(" ");*/
 
   if(fullLine()) Serial.println("G");
-  else if(halfLineLeft()) Serial.println("R");
-  else if(halfLineRight()) Serial.println("L");
+  else if(halfLineLeft()) Serial.println("L");
+  else if(halfLineRight()) Serial.println("R");
   else Serial.println(" ");
  
   turn_servo(angle);
