@@ -9,7 +9,7 @@
 #include <steeringControl.h>
 #include <reflectanceSensor.h>
 #include <steeringOrientation.h>
-#include <VehicleInforamations.h>
+#include <VehicleInformations.h>
 
 // Set LED_BUILTIN if it is not defined by Arduino framework
 // #define LED_BUILTIN 2
@@ -27,9 +27,7 @@ void setup() {
 void loop() {
   uint16_t sensorData = getSensorData();
   int rotationAngle = steeringOrientation(sensorData);
-  break_vehicle(angle);
+  // break_vehicle(rotationAngle);
   turn_servo(rotationAngle);
   drive();
-  // TODO: lane change and right angle should be changed
-  refreshInformations('Y', 'Y', (rotationAngle < 0 ? 'L' : 'R'), rotationAngle, speed, sensorData);
 }

@@ -40,11 +40,11 @@ int initial_motor(int pinnum1, int pinnum2, int ultnum, int eepnum, int tastenum
 }
 
 void break_vehicle(int rotation_angle) {
-  int break_strength = map(abs(rotation_angle), 0, 35, 20, 100);
-  drive_forward(speed - break_strength);
+  int break_strength = map(abs(rotation_angle), 0, 35, 0, speed > 20 ? speed - 20 : 0);
+  if (break_strength > 0) {
+    drive_forward(speed - break_strength);
+  }
 }
-
-
 
 int turn_motor_off() {
   speed = 0;
@@ -65,9 +65,9 @@ int drive_forward(int value) {
  * read the button, and when it is high change the button_activ from high to low or from low to high
  * then when the butt
  * */
-    if  (value < 150 || value > 255) {
-      value = 255;
-    }
+  if  (value < 150 || value > 255) {
+    value = 255;
+  }
   speed = value;
     ledcWrite(15,value);
     digitalWrite(pin2, LOW);
@@ -96,12 +96,9 @@ void drive(){
     }
   } else if (can_drive == 1) {
     if (motor_active != 1) {
-      //drive_forward(255);
       drive_forward(255);
     }
   }
-  //Serial.println(motor_active);
-  //delay(1000);
 }
 
 /**
@@ -109,10 +106,9 @@ void drive(){
  */
 int drive_backward(int value) {
  
- if  (value < 150 || value > 255)
-  {
+ if  (value < 150 || value > 255) {
     value = 255;
-      }
+  }
   ledcWrite(16,value);
   digitalWrite(pin1, LOW);
   digitalWrite(ult, HIGH);

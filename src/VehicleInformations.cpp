@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <drivecontrol.h>
+#include <steeringControl.h>
 
 #define SHIFT8(info, bits) ((__uint8_t) info << bits)
 #define SHIFT16(info, bits) ((__uint16_t) info << bits)
@@ -35,17 +37,17 @@ int translateValues(__uint16_t interface) {
 
     unsigned int firstBits = GET_FIRST_8_BITS(interface);
     int angle = GET_SPEED(firstBits) * (GET_SIGN(firstBits) == 1 ? -1 : 1);
-    // turn_survo(angle);
+    turn_servo(angle);
 
     int speed = GET_LAST_8_BITS(interface);
-    // drive_forward(speed);
+    drive_forward(speed);
     return 1;
 }
 
-__uint8_t getLaneInfos(unsigned char lane_change, unsigned char right_angle, unsigned char r_l_curve) {
+__uint8_t getLaneInfos(unsigned char line_change, unsigned char right_angle, unsigned char r_l_curve) {
     __uint8_t result;
 
-    result  = lane_change == 'Y' || lane_change == 'y' ? SHIFT8(1, 7) : 0;
+    result  = line_change == 'Y' || line_change == 'y' ? SHIFT8(1, 7) : 0;
     result |= right_angle == 'Y' || right_angle == 'y' ? SHIFT8(1, 6) : 0;
     result |= r_l_curve   == 'R' || r_l_curve   == 'r' ? SHIFT8(1, 5) : 0;
     
