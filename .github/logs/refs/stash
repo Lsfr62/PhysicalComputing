@@ -1,0 +1,5 @@
+0000000000000000000000000000000000000000 6367aa70f046ce69318504db1481400e52387e9a Lucas Schäfer <lucas.schaefer@mni.thm.de> 1629385025 +0200	WIP on dokumentation: 62ad8e4 Latex Grundgerüst hinzugefügt
+6367aa70f046ce69318504db1481400e52387e9a 43188298a65708477822e9b69cdbc00f33c50e97 Lucas Schäfer <lucas.schaefer@mni.thm.de> 1629974099 +0200	WIP on dokumentation: 4ecbe97 Docs: Grundstruktur der Dokumentation hinzugefügt
+43188298a65708477822e9b69cdbc00f33c50e97 9c45d247710bffa1535eb183758fcac01148301e Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630244641 +0200	WIP on master: 20ce68b refactor: added Main.h, Improved comments
+9c45d247710bffa1535eb183758fcac01148301e ba483de592479976984d106da5b6643ed607ca02 Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630272516 +0200	WIP on cleanup: fc001d9 refactor: moved some doc comments to header
+ba483de592479976984d106da5b6643ed607ca02 ade3241fe508fd604ab6f93785e6e8434ccde303 Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630273793 +0200	WIP on cleanup: fc001d9 refactor: moved some doc comments to header

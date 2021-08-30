@@ -1,0 +1,28 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = git@github.com:Lsfr62/PhysicalComputing.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "master"]
+	remote = origin
+	merge = refs/heads/master
+[branch "newtestbranch"]
+	remote = origin
+	merge = refs/heads/newtestbranch
+[branch "dokumentation"]
+	remote = origin
+	merge = refs/heads/dokumentation
+[pull]
+	rebase = false
+[branch "9-binary-interface"]
+	remote = origin
+	merge = refs/heads/9-binary-interface
+[branch "higherLevelFunctions"]
+	remote = origin
+	merge = refs/heads/higherLevelFunctions
+[branch "cleanup"]
+	remote = origin
+	merge = refs/heads/cleanup

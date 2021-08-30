@@ -1,0 +1,20 @@
+0000000000000000000000000000000000000000 b1bdb6fc5eaec8219066db5c90220a3ed3ffe8dd Lucas Schäfer <lucas.schaefer@mni.thm.de> 1629360128 +0200	branch: Created from refs/remotes/origin/dokumentation
+b1bdb6fc5eaec8219066db5c90220a3ed3ffe8dd 4a7a095c9fb0ff554468c9959488501f47af4b7b Lucas Schäfer <lucas.schaefer@mni.thm.de> 1629360147 +0200	merge master: Fast-forward
+4a7a095c9fb0ff554468c9959488501f47af4b7b e81d819b59d17a67b95ef473a58882e1f49cf57c Lucas Schäfer <lucas.schaefer@mni.thm.de> 1629384803 +0200	commit: Latex Dokumentation Grundgerüst hinzugefügt
+e81d819b59d17a67b95ef473a58882e1f49cf57c 4a7a095c9fb0ff554468c9959488501f47af4b7b Lucas Schäfer <lucas.schaefer@mni.thm.de> 1629384918 +0200	reset: moving to HEAD^
+4a7a095c9fb0ff554468c9959488501f47af4b7b dce46866ad78baabeef4fd9eff3199148862082f Lucas Schäfer <lucas.schaefer@mni.thm.de> 1629384962 +0200	reset: moving to HEAD^
+dce46866ad78baabeef4fd9eff3199148862082f 62ad8e49a166549735c719612827ae619c4935e1 Lucas Schäfer <lucas.schaefer@mni.thm.de> 1629384988 +0200	commit: Latex Grundgerüst hinzugefügt
+62ad8e49a166549735c719612827ae619c4935e1 ac8b081b1327877f1191f4f2fc11ee693671ae9f Lucas Schäfer <lucas.schaefer@mni.thm.de> 1629385116 +0200	commit (merge): merged local changes
+ac8b081b1327877f1191f4f2fc11ee693671ae9f 4ecbe975b368d04bf33b60dabbbce91e920daf4f Lucas Schäfer <lucas.schaefer@mni.thm.de> 1629797098 +0200	commit: Docs: Grundstruktur der Dokumentation hinzugefügt
+4ecbe975b368d04bf33b60dabbbce91e920daf4f 59a4180dee4103c0fac06506da8a62b5efc414d3 Lucas Schäfer <lucas.schaefer@mni.thm.de> 1629974105 +0200	pull: Fast-forward
+59a4180dee4103c0fac06506da8a62b5efc414d3 371f9870cd58d12495f47235abd1c5a8860aca05 Lucas Schäfer <lucas.schaefer@mni.thm.de> 1629975530 +0200	commit: docs: first draft for the indroduction
+371f9870cd58d12495f47235abd1c5a8860aca05 f6d97514b8e141cacbd22ed20b90ecbdd3ba07a9 Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630249132 +0200	commit: revised section Lenkung
+f6d97514b8e141cacbd22ed20b90ecbdd3ba07a9 7b1e9988ca944d8213ea1814a0652da803ff2b0f Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630253455 +0200	commit: revised section Interfaced, removed section ende
+7b1e9988ca944d8213ea1814a0652da803ff2b0f 6ead928f58506837101b377682064f2906fe8466 Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630255894 +0200	commit: revised section Aufbau, added literature
+6ead928f58506837101b377682064f2906fe8466 7bb55b222afeb346f9ad2653852c967b25636281 Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630259711 +0200	pull: Fast-forward
+7bb55b222afeb346f9ad2653852c967b25636281 d1357628aab0b810b5d2b9b7a10f64754ee3770c Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630262284 +0200	commit: added captions to all Pictures from Section Sensorik
+d1357628aab0b810b5d2b9b7a10f64754ee3770c d43aa38435a6328921ee22fb8e9ef869bf460368 Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630262508 +0200	commit: changed layout of documentation
+d43aa38435a6328921ee22fb8e9ef869bf460368 30c075bbe832094c385695cc1cf09b443241bed6 Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630263137 +0200	commit: minor layout tweaks, fixed typos
+30c075bbe832094c385695cc1cf09b443241bed6 987511a15a7f07fa0b39d602a5e63904dd9c3da6 Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630266837 +0200	commit: added documentation for Drivetrain
+987511a15a7f07fa0b39d602a5e63904dd9c3da6 fd6d03774b3795b87b0a2b19651e2f5c01b14b57 Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630269318 +0200	commit: Doku fertig gestellt
+fd6d03774b3795b87b0a2b19651e2f5c01b14b57 4efb6d70f1ad9f656736b4ec125138a3b7c52a74 Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630277061 +0200	commit: minor Tweaks to documentation

@@ -1,0 +1,20 @@
+\babel@toc {ngerman}{}
+\contentsline {figure}{\numberline {1}{\ignorespaces Aufbau der Schaltung}}{2}{figure.1}%
+\contentsline {figure}{\numberline {2}{\ignorespaces Fertiges Fahrzeug \cite {roboter-bausatz.de2WDRCSMART2020}}}{3}{figure.2}%
+\contentsline {figure}{\numberline {3}{\ignorespaces Reflexionssensor auf der Fahrbahn.}}{6}{figure.3}%
+\contentsline {figure}{\numberline {4}{\ignorespaces Sensor in Aktion mit entsprechender Ausgabe.}}{6}{figure.4}%
+\contentsline {figure}{\numberline {5}{\ignorespaces Verschiedene Ausgaben je nach Sensorposition.}}{7}{figure.5}%
+\contentsline {figure}{\numberline {6}{\ignorespaces QTRX-HD-15A Reflectance Sensor Array \cite {poluluQTRXHD15AReflectanceSensor2021}}}{7}{figure.6}%
+\contentsline {figure}{\numberline {7}{\ignorespaces Vereinfachte Darstellung der Funktionsweise des Sensors(ESP32 Abbildung aus \cite {ESP32Picture})}}{8}{figure.7}%
+\contentsline {figure}{\numberline {8}{\ignorespaces Spannungskurve am Pin}}{8}{figure.8}%
+\contentsline {figure}{\numberline {9}{\ignorespaces Schaltplan der A Version (links) und der RC Version(Rechts) \cite {poluluQTRXHD15AReflectanceSensor2021}}}{9}{figure.9}%
+\contentsline {figure}{\numberline {10}{\ignorespaces Entladung des Kondensators über die Zeit.}}{9}{figure.10}%
+\contentsline {figure}{\numberline {11}{\ignorespaces Darstellung der Thresholds anhand der Entladungskurve.}}{10}{figure.11}%
+\contentsline {figure}{\numberline {12}{\ignorespaces Die LED links, der Fotowiderstand rechts und die Trennwand in der Mitte..}}{11}{figure.12}%
+\contentsline {figure}{\numberline {13}{\ignorespaces Sensor auf der Fahrbahn mit entsprechender Debug-Ausgabe}}{11}{figure.13}%
+\contentsline {figure}{\numberline {14}{\ignorespaces Kalibrieren der Thresholds über das Terminal}}{12}{figure.14}%
+\contentsline {figure}{\numberline {15}{\ignorespaces Darstellung der aus der Strecke abgeleiteten Lenkung.}}{14}{figure.15}%
+\contentsline {figure}{\numberline {16}{\ignorespaces Ableitung des Lenkwinkels aus den Sensordaten.}}{15}{figure.16}%
+\contentsline {figure}{\numberline {17}{\ignorespaces Die Problematik mit der Streckenbegrenzung.}}{15}{figure.17}%
+\contentsline {figure}{\numberline {18}{\ignorespaces Erkennen der Querlinien.}}{16}{figure.18}%
+\providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

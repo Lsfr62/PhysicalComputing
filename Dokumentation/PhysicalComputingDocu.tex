@@ -1,0 +1,121 @@
+% Angabe zu Blattgröße, Schriftgröße, Hinzufügen des Bildverzeichnis und Quellverzeichnis als Punkt im Inhaltsverzeichnis, einseitiger Druck
+\documentclass[a4paper,12pt,listof=toc,bibliography=totoc,oneside]{scrartcl}	
+\usepackage{geometry}
+\usepackage[utf8]{inputenc} % Zeichenkodierung
+\usepackage[ngerman]{babel} %Sprachpaket
+\usepackage{blindtext}
+\usepackage{csquotes}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{enumitem,xcolor}
+\usepackage{sectsty}
+\usepackage{xpatch}
+%Verlinkungen inner- und außerhalb von Latex
+\usepackage[pdftex]{hyperref}
+\usepackage[hyperref]{ntheorem}
+
+%Grafik und Grafikpositionierung
+\usepackage{graphicx}
+\usepackage{here}
+\graphicspath{{img/}}
+
+%Dokumeninformationen
+\hypersetup{
+	pdftitle={Physical Computing Dokumentation},
+	pdfsubject={Physical Computing Dokumentation},
+	pdfauthor={Abdulrahman Tibi, Paul Till Tolkmitt, Mohammad Alayoub, Lucas Schäfer},
+	pdfkeywords={},
+	pdftex=true,
+	bookmarksopen=true,
+	bookmarksopenlevel=3,
+	breaklinks,
+	colorlinks,
+	citecolor=red,
+	linkcolor=black,
+	urlcolor=black,
+}
+
+%Seitenränder
+\geometry{a4paper, top=30mm, left=25mm, right=25mm, bottom=25mm, headsep=10mm, footskip=15mm}
+
+%THM-Farben
+\definecolor{thm_grey}{HTML}{4a5c66}
+\definecolor{thm_green}{HTML}{80ba24}
+
+%Kopf - und Fusszeile
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+
+\fancypagestyle{inhaltsverzeichnis}{
+	\fancyhf{}
+	\fancyhead[L]{Inhaltsverzeichnis}
+	\fancyfoot[C]{\thepage}
+	
+	\renewcommand{\headrulewidth}{3pt}
+	\renewcommand{\footrulewidth}{3pt}
+	
+	\xapptocmd{\footrule}{\color{black}}{}{}
+	\xpretocmd{\footrule}{\color{thm_green}}{}{}
+	\xapptocmd{\footrule}{\color{black}}{}{}
+	
+	\xapptocmd{\headrule}{\color{black}}{}{}
+	\xpretocmd{\headrule}{\color{thm_green}}{}{}
+	\xapptocmd{\headrule}{\color{black}}{}{}
+}
+
+\renewcommand{\headrulewidth}{3pt}
+\renewcommand{\footrulewidth}{3pt}
+
+\xapptocmd{\footrule}{\color{black}}{}{}
+\xpretocmd{\footrule}{\color{thm_green}}{}{}
+\xapptocmd{\footrule}{\color{black}}{}{}
+
+\xapptocmd{\headrule}{\color{black}}{}{}
+\xpretocmd{\headrule}{\color{thm_green}}{}{}
+\xapptocmd{\headrule}{\color{black}}{}{}
+
+\DeclareUnicodeCharacter{1E91}{\^z}
+
+
+% % % % % % % % % % % % % %
+% % % Dokument Beginn % % %
+% % % % % % % % % % % % % %
+\begin{document}
+	%Deckblatt
+	\include{chapter/deckblatt}
+	
+	%Inhaltsverzeichnis
+	\thispagestyle{inhaltsverzeichnis}
+	\pagenumbering{roman}
+	\tableofcontents
+	\clearpage
+	
+	%Inhalt
+	\pagestyle{fancy}
+	\pagenumbering{arabic}
+	\setcounter{page}{1} %Seitenzähler auf 1 setzen, da Inhaltsverzeichnis sonst als Seite 1 zählt
+	\include{chapter/hauptteil}
+	\clearpage
+	
+	%Römische Seitennummerierung
+	\pagenumbering{Roman}
+	\setcounter{page}{1}
+	
+	
+	%Anhang
+	\include{chapter/anhang}
+	\pagebreak
+	
+	%Abbildungsverzeichnis
+	\fancyhead{}
+	\fancyhead[L]{Abbildungsverzeichnis}
+	\listoffigures
+	\pagebreak
+
+	%Literaturverzeichnis
+	\fancyhead[L]{Literatur}
+	\bibliographystyle{unsrtdin}	
+	\bibliography{literature/literature}
+	
+\end{document}

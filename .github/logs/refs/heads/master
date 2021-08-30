@@ -1,0 +1,13 @@
+0000000000000000000000000000000000000000 4a7a095c9fb0ff554468c9959488501f47af4b7b Lucas Schäfer <lucas.schaefer@mni.thm.de> 1629359823 +0200	clone: from github.com:Lsfr62/PhysicalComputing.git
+4a7a095c9fb0ff554468c9959488501f47af4b7b 75c15f3cdd769a37308694ab95d9e8439978c107 Lucas Schäfer <lucas.schaefer@mni.thm.de> 1629463240 +0200	commit (merge): feat: Interface for Vehicle control
+75c15f3cdd769a37308694ab95d9e8439978c107 a8c9d3f8651f14d20a843a7a15d8fca142c20b33 Lucas Schäfer <lucas.schaefer@mni.thm.de> 1629463590 +0200	commit (merge): feat: erkennen der Querlinien, die 90°-Kurven und Lane-switches erkennen
+a8c9d3f8651f14d20a843a7a15d8fca142c20b33 21c8c3772ec424545e730f70c38f4c84e0d29d7a Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630242946 +0200	commit: refactor: delete unnecesary files
+21c8c3772ec424545e730f70c38f4c84e0d29d7a fcf3c39b67bf63d0353242bf578eadcd67e78968 Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630243440 +0200	commit (merge): refactor: renamed Files
+fcf3c39b67bf63d0353242bf578eadcd67e78968 20ce68bbfba1574369d6692a5c0d7584402fde03 Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630244519 +0200	commit: refactor: added Main.h, Improved comments
+20ce68bbfba1574369d6692a5c0d7584402fde03 b797140935b02173218a4a229c56c5daef47a6c7 Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630266890 +0200	pull: Fast-forward
+b797140935b02173218a4a229c56c5daef47a6c7 9806ef7b0453c2c7b1c29839cbc1c85147ec90f3 Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630269445 +0200	pull: Fast-forward
+9806ef7b0453c2c7b1c29839cbc1c85147ec90f3 f176db5c23c6159c72b18e305c71db1fc849310c Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630269566 +0200	commit (merge): docs: added finished documentation
+f176db5c23c6159c72b18e305c71db1fc849310c 97c9b42aea0fbe135fd4d277db18ba6d9c8cc840 Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630277124 +0200	pull: Fast-forward
+97c9b42aea0fbe135fd4d277db18ba6d9c8cc840 4bc4d93b58e3f8ce4f0010c96aa6b6ba1d73c141 Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630318685 +0200	commit (merge): docs: minor tweaks to documentation
+4bc4d93b58e3f8ce4f0010c96aa6b6ba1d73c141 df86d49d6154ccb6874aab4fea8a81b4ad0ee418 Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630319454 +0200	commit (merge): docs: minor tweaks to doc file
+df86d49d6154ccb6874aab4fea8a81b4ad0ee418 b1aab19c131fb1be4d85473bca6e3955f4579b40 Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630331148 +0200	merge cleanup: Fast-forward

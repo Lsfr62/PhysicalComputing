@@ -1,46 +1,38 @@
-/*
- * 2WD RC SMART CAR CHASSIS
- * 
- * 
- */
+#include "main.h"
 
-#include <Arduino.h>
-#include <drivecontrol.h>
-#include <steeringControl.h>
-#include <reflectanceSensor.h>
-#include <steeringOrientation.h>
-
-// Set LED_BUILTIN if it is not defined by Arduino framework
-// #define LED_BUILTIN 2
+bool taste = false;
 
 void setup() {
-  Serial.begin(115200);
-  initial_motor(4, 0, 16, 17,34);
-  initialize_servo(15);
-  pinMode(13, OUTPUT);  // TODO ist das wichtig?
-  //Serial.println("B");
+  Serial.begin(baudRate);
+  initial_motor(15, 21, 22, 23,34);
+  initialize_servo(19);
   sensorSetup();
 }
 
 void loop() {
-  //Serial.println();
-  turn_servo(steeringOrientation(getSensorData()));
-  //delay(300);
-  //Serial.println((int)getSensorData(), BIN);
-  /*Serial.println("Start");
-  // TEST: Es wird komplett nach links und dann nach Rechts gelenkt
-  for (int i = 0; i < 36; i++) {
-    turn_servo(i);
-    delay(20);
-  }
 
-  for (int i = 0; i > -36; i--) {
-    turn_servo(i);
-    delay(20);
-  }
-  //sensorUpdate();
-  //int x = getSensorData;
-  Serial.println((int)getSensorData(), BIN);
-  Serial.println("Stop");
-  drive()
+  //Starts DC-motor, when button is pressed 
+  if(Serial.available()){
+    String s = Serial.readStringUntil('\n'); 
+    taste = !taste;
+    }
+
+  // Starts SensorCallibrations, when key on an attached Computer is pressed
+  if(taste) {
+    callibriereThreshold();
+    taste = false;
+    }
+
+  //Debug output for 90°-Corner (G), lane switch right (R) and lane switch left (L) 
+  if(fullLine()) Serial.println("G");
+  else if(halfLineLeft()) Serial.println("L");
+  else if(halfLineRight()) Serial.println("R");
+  else Serial.println(" ");
+
+  //Drive Sequenz for simple line following
+  uint16_t sensorData = getSensorData();
+  int rotationAngle = steeringOrientation(sensorData);
+  turn_servo(rotationAngle);
+  drive(200);
+  
 }

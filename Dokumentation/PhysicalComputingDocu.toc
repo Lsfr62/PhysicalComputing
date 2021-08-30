@@ -1,0 +1,27 @@
+\babel@toc {ngerman}{}
+\contentsline {section}{\numberline {1}Einleitung}{1}{section.1}%
+\contentsline {section}{\numberline {2}Entwicklung eines MCU-Rally Cars}{1}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Aufbau der Komponenten}{1}{subsection.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.1}Aufbau des Servos}{2}{subsubsection.2.1.1}%
+\contentsline {subsubsection}{\numberline {2.1.2}Arretierung des Lenkgestänges}{2}{subsubsection.2.1.2}%
+\contentsline {subsubsection}{\numberline {2.1.3}Probleme beim Aufbau}{3}{subsubsection.2.1.3}%
+\contentsline {subsection}{\numberline {2.2}Antrieb}{3}{subsection.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.1}Aufbau}{3}{subsubsection.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.2.2}Software}{3}{subsubsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.3}Lenkung}{4}{subsection.2.3}%
+\contentsline {subsubsection}{\numberline {2.3.1}Hardware}{4}{subsubsection.2.3.1}%
+\contentsline {subsubsection}{\numberline {2.3.2}Funktionsweise des Servos}{4}{subsubsection.2.3.2}%
+\contentsline {subsubsection}{\numberline {2.3.3}Software}{5}{subsubsection.2.3.3}%
+\contentsline {subsubsection}{\numberline {2.3.4}Probleme beim Servo}{5}{subsubsection.2.3.4}%
+\contentsline {subsection}{\numberline {2.4}Sensorik}{6}{subsection.2.4}%
+\contentsline {subsubsection}{\numberline {2.4.1}Grundidee hinter dem Sensor}{6}{subsubsection.2.4.1}%
+\contentsline {subsubsection}{\numberline {2.4.2}Sensor Hardware}{7}{subsubsection.2.4.2}%
+\contentsline {subsubsection}{\numberline {2.4.3}Sensorleiste Programmierung}{11}{subsubsection.2.4.3}%
+\contentsline {subsubsection}{\numberline {2.4.4}Interpretation der Sensorleiste: Mitte der Linie finden}{13}{subsubsection.2.4.4}%
+\contentsline {subsubsection}{\numberline {2.4.5}Mitte der Linie interpretieren für die Lenkung}{13}{subsubsection.2.4.5}%
+\contentsline {subsubsection}{\numberline {2.4.6}Weitere Funktionalität: Das erkennen von doppelten Quer-Linien}{16}{subsubsection.2.4.6}%
+\contentsline {subsection}{\numberline {2.5}Interface}{17}{subsection.2.5}%
+\contentsline {section}{\numberline {3}Fazit}{18}{section.3}%
+\contentsline {section}{\nonumberline Abbildungsverzeichnis}{I}{section*.2}%
+\contentsline {section}{\nonumberline Literatur}{II}{section*.4}%
+\providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

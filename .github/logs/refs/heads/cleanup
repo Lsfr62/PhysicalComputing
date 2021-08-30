@@ -1,0 +1,9 @@
+0000000000000000000000000000000000000000 f176db5c23c6159c72b18e305c71db1fc849310c Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630270841 +0200	branch: Created from HEAD
+f176db5c23c6159c72b18e305c71db1fc849310c fc001d9f07b404d4b18e29c83e9bbd2dcedcaf7e Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630271317 +0200	commit: refactor: moved some doc comments to header
+fc001d9f07b404d4b18e29c83e9bbd2dcedcaf7e 036ec22a0593078b45d48df1896fa57bd4c2c739 Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630319696 +0200	commit (merge): rebased Branch
+036ec22a0593078b45d48df1896fa57bd4c2c739 9b7c4d32d76dee92b599995227e16a113f3a6e3d Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630320988 +0200	commit: tweaked doc comments in modules driveControl and vehicleInterface
+9b7c4d32d76dee92b599995227e16a113f3a6e3d c67413af0a2aa0d29d3495e484a7bec18f6cc12e Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630321191 +0200	commit: refactor: cleaned Module steeringControl
+c67413af0a2aa0d29d3495e484a7bec18f6cc12e d74df546d13a064f2d664f113ce64eec12a34035 Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630321421 +0200	commit: refactor: some minor Tweaks to modlue steeringOrientation
+d74df546d13a064f2d664f113ce64eec12a34035 0dcc3740859107daf2ab445171173a2927fa7e30 Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630330695 +0200	pull: Fast-forward
+0dcc3740859107daf2ab445171173a2927fa7e30 b36b565dc91a3d037e27000b97309bcd6f617666 Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630330916 +0200	commit: refactor: minor Tweaks to steeringOrientation
+b36b565dc91a3d037e27000b97309bcd6f617666 b1aab19c131fb1be4d85473bca6e3955f4579b40 Lucas Schäfer <lucas.schaefer@mni.thm.de> 1630331121 +0200	commit: refactor: removed unnecessary files

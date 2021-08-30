@@ -1,136 +1,144 @@
-#include <Arduino.h>
-//TODO Werte in Speicher speichern und kallibrierung skippen
+#include "reflectanceSensor.h"
+
 const int numberOfSensors = 16;
 int sensors[numberOfSensors];
 int messwerte[numberOfSensors];
-int threshold[numberOfSensors]; //jeder Sensr braucht einen individuellen Wert, um beste Ergebnisse zu bringen
-int control = 13;
+int threshold[numberOfSensors]; //jeder Sensor braucht einen individuellen Wert, um beste Ergebnisse zu bringen
 void ausgabe();
-void callibriereThreshold();
 void waitTillEnter();
-void sensorUpdate();
+void saveThresholdsToROM();
+void readThresholdsFromROM();
+bool isIn(int, int, int);
+int counterSinceLastOrthogonalLineLeft = -1; //Es werden immer zwei Querlienien hinterinenander abgefahren. Um die Zeit dazwischen zu messen, wird dieser Counter eingeführt
+int counterSinceLastOrthogonalLineRight = -1; //Es werden immer zwei Querlienien hinterinenander abgefahren. Um die Zeit dazwischen zu messen, wird dieser Counter eingeführt
+int counterSinceLastOrthogonalLine = -1; //Es werden immer zwei Querlienien hinterinenander abgefahren. Um die Zeit dazwischen zu messen, wird dieser Counter eingeführt
 
 /**
- * Ruft Daten von Sensoren ab
+ * Gets data from sensor
  * 
- * @return ganze Zahl der länge 16 zurück, worin 1 = schwarz, weiß = 0 ist
+ * @return integer of 16 Bits, where 1 = black, white = 0
  * 
- * Beispielaufruf: 
+ * Example function call: 
  * Serial.println((int)getSensorData(), BIN);
  * 
- * Achtung: Gibt auch dann 0 zurück, wenn kein Sensor vorhanden
+ * Warning: also returns 0, if sensor is not found
 */
 uint16_t getSensorData() {
     sensorUpdate();
     int16_t erg = 0;
     for(int i = 0; i < numberOfSensors; i++) {
-        if (sensors[i] < 0) continue;
-        erg = erg + (messwerte[i] << i) ;
+        if (messwerte[i] < 1) erg = erg + (0 << i);
+        else erg = erg + (1 << i);
     }
     return erg;
-}
+} 
 
 /**
- * Sorgt dafür, dass die Messerte in messwerte[] auf dem neusten Stand sind.
+ * Store measurements in messwerte[] array.
 */
 void sensorUpdate()
 {
     for (int i = 0; i < numberOfSensors; i++)
     {
-        if (threshold[i] < 0)
+        if (threshold[i] <= 0)
             continue;
-        digitalWrite(control, HIGH);
-
-        pinMode(sensors[i], OUTPUT);    //pinModeAll(OUTPUT);
-        digitalWrite(sensors[i], HIGH); //digitalWrite(ioLine, HIGH);
+        pinMode(sensors[i], OUTPUT);    
+        digitalWrite(sensors[i], HIGH); 
         delayMicroseconds(15);
-        pinMode(sensors[i], INPUT); //pinMode(ioLine, INPUT);
-
+        pinMode(sensors[i], INPUT); 
         delayMicroseconds(threshold[i]); //mehr 0-en => Zahl runter, mehr 1-er => Zahl hoch
-
         messwerte[i] = digitalRead(sensors[i]);
-        digitalWrite(control, LOW);
         delayMicroseconds(500);
     }
-    ausgabe();
+    //ausgabe(); //output makes sence, when you want to check, if the pins are correctly linked
     
 }
 
-
+/**
+ * prepares sensors for usage
+*/
 void sensorSetup()
 {
+    EEPROM.begin(numberOfSensors);
+    
+    for(int i = 0; i < numberOfSensors; i ++) {
+        Serial.print(i);
+        Serial.print(":");
+        Serial.print(EEPROM.read(i));
+        Serial.println(" ");
+    }
     for (int i = 0; i < numberOfSensors; i++)
     {
         sensors[i] = -1;
         messwerte[i] = -1;
         threshold[i] = -1;
     }
-    /*
-    sensors[1 - 1] = 5;
-    //sensors[2 - 1] = 14;
-    sensors[3 - 1] = 18; 
-    //sensors[4 - 1] = 27;
-    sensors[5 - 1] = 19;
-    //sensors[6 - 1] = 26;
-    sensors[7 - 1] = 21;
-    //sensors[8 - 1] = 25;
-    sensors[9 - 1] = 22;
-    //sensors[10 - 1] = 33;
-    sensors[11 - 1] = 9;
-    //sensors[12 - 1] = 32;
-    sensors[13 - 1] = 13;
-    //sensors[14 - 1] = 8;
-    sensors[15 - 1] = 12;
-    //sensors[(16 - 1)] = 7;
-    */
-   sensors[1 - 1] = 27;
-    //sensors[2 - 1] = 14;
-    sensors[3 - 1] = 2; 
-    //sensors[4 - 1] = 27;
-    sensors[5 - 1] = 12;
-    //sensors[6 - 1] = 26;
+
+   
+    sensors[1 - 1] = 0;
+    sensors[2 - 1] = 2;
+    sensors[3 - 1] = 4; 
+    sensors[4 - 1] = 16;
+    sensors[5 - 1] = 17;
+    sensors[6 - 1] = 5;
     sensors[7 - 1] = 18;
-    //sensors[8 - 1] = 25;
-    sensors[9 - 1] = 19;
-    //sensors[10 - 1] = 33;
-    sensors[11 - 1] = 26;
-    //sensors[12 - 1] = 32;
-    sensors[13 - 1] = 5;
-    //sensors[14 - 1] = 8;
-    sensors[15 - 1] = 21;
-    //sensors[(16 - 1)] = 7;
+    sensors[8 - 1] = 35;
+    sensors[9 - 1] = 32;
+    sensors[10 - 1] = 33;
+    sensors[11 - 1] = 25;
+    sensors[12 - 1] = 26;
+    sensors[13 - 1] = 27;
+    sensors[14 - 1] = 14;
+    sensors[15 - 1] = 12;
+    sensors[(16 - 1)] = 13;
+    
     
 
-    //zu viele 0-en => Zahl runter, zu viele  1-er => Zahl hoch
-
-    //RC Kit Beschreibzung soll in Doc!
-    //callibriereThreshold();
-    threshold[0] = 1160;
-    threshold[2] = 610;
-    threshold[4] = 1030;
-    threshold[6] = 1135;
-    threshold[8] = 1010;
-    threshold[10] = 1090;
-    threshold[12] = 1030;
+    
+    readThresholdsFromROM();
+    
+    /*
+    Historical: 
+    Thresholds has been added manually in code as magic numbers. There was no calibration method
+    //too many 0-en => number down, too many  1-er => number up
+    threshold[0] = -1;//!
+    threshold[1] = 390;
+    threshold[2] = 530;
+    threshold[3] = 325;
+    threshold[4] = 365;
+    threshold[5] = 380;
+    threshold[6] = 480;
+    threshold[7] = -1;
+    threshold[8] = 420;
+    threshold[9] = 380;
+    threshold[10] = 510;
+    threshold[11] = 420;
+    threshold[12] = 425;
+    threshold[13] = 455;
+    threshold[14] = 555;
+    threshold[15] = 710;
+    */
     
 }
 
 
 /**
- * Ermittelt Threshold-Werte für jeden Sensor bei Tastendruck.
- * 
- * Der Threshold ist eine Zahl, die für jeden Sensor einzelnt bestimmt werden muss.
- * Dafür werden für jeden Sensor einzelnt Werte ausprobiert. Dafür werden alle
- * Werte nacheinander durch gegangen. Zunächst wird ein oberer 
- * Grenzwert bestimmt (Supremum-Threshold), der eigentliche Threshold-Wert liegt gewiss darunter.
- * Dann wird ein unterer Grenzwet bestimmt (Infimum-Threshold), der eignetliche Threshold-Wert 
- * liegt gewiss darüber. Dann wird das arithmetische Mittel dieser Zahlen als 
- * Threshold gespeichert. Alle Daten werden in Arrays gespeichert;
- * infimumThresholds[3] entspricht der unteren Grenze für den Sensor 4 (4, da wir 3+1 rechnen müssen).
- * 
+ * Measures thresholds for every sensor after enter-key is pressed
 */
 void callibriereThreshold()
 {
+
+/*
+    In German:
+  Der Threshold ist eine Zahl, die für jeden Sensor einzelnt bestimmt werden muss.
+  Dafür werden für jeden Sensor einzelnt Werte ausprobiert. Dafür werden alle
+  Werte nacheinander durch gegangen. Zunächst wird ein oberer 
+  Grenzwert bestimmt (Supremum-Threshold), der eigentliche Threshold-Wert liegt gewiss darunter.
+  Dann wird ein unterer Grenzwet bestimmt (Infimum-Threshold), der eignetliche Threshold-Wert 
+  liegt gewiss darüber. Dann wird das arithmetische Mittel dieser Zahlen als 
+  Threshold gespeichert. Alle Daten werden in Arrays gespeichert;
+  infimumThresholds[3] entspricht der unteren Grenze für den Sensor 4 (4, da wir 3+1 rechnen müssen).
+*/
 
 
     int supremumThresholds[numberOfSensors];
@@ -140,29 +148,25 @@ void callibriereThreshold()
         supremumThresholds[i] = -1;
         infimumThresholds[i] = -1;
     }
-    Serial.println("Halte Sensor auf schwartz und drücke Enter.");
-
+    Serial.println("Halte Sensor auf schwarz und drücke Enter.");
     waitTillEnter();
-    Serial.println("Kallibriere Schwartz...");
+    Serial.println("Kallibriere schwarz...");
     for (int i = 0; i < numberOfSensors; i++)
     {
-        if (sensors[i] < 0)
-            continue;
-        int steps = 10;
+        if (sensors[i] < 0) continue;
+        int steps = 10; //10
         int triggerLimit = 0;
         int testLimit = 4;
-        for (int thresholdTry = 0; thresholdTry < 5000; thresholdTry = thresholdTry + steps)
+        for (int thresholdTry = 0; thresholdTry < 10000; thresholdTry = thresholdTry + steps)
         {
-            digitalWrite(control, HIGH);
-
             pinMode(sensors[i], OUTPUT);    //pinModeAll(OUTPUT);
             digitalWrite(sensors[i], HIGH); //digitalWrite(ioLine, HIGH);
             delayMicroseconds(15);
             pinMode(sensors[i], INPUT);      //pinMode(ioLine, INPUT);
             delayMicroseconds(thresholdTry); //mehr 0-en => Zahl runter, mehr 1-er => Zahl hoch
-            if (digitalRead(sensors[i]) == 0)
+            if (digitalRead(sensors[i]) == 0){
                 triggerLimit++;
-
+            }
             if (digitalRead(sensors[i]) == 1)
                 triggerLimit = 0;
             if (triggerLimit == testLimit)
@@ -170,10 +174,8 @@ void callibriereThreshold()
                 supremumThresholds[i] = thresholdTry;
                 break;
             }
-            digitalWrite(control, LOW);
             delayMicroseconds(500);
-
-            if (5000 - steps - steps / 2 < thresholdTry)
+            if (10000 - steps - steps / 2 < thresholdTry)
             {
                 Serial.print("Pin");
                 Serial.print(i);
@@ -205,16 +207,13 @@ void callibriereThreshold()
         int testLimit = 4;
         for (int thresholdTry = supremumThresholds[i]; thresholdTry > 0; thresholdTry = thresholdTry - steps)
         {
-            digitalWrite(control, HIGH);
-
-            pinMode(sensors[i], OUTPUT);    //pinModeAll(OUTPUT);
-            digitalWrite(sensors[i], HIGH); //digitalWrite(ioLine, HIGH);
+            pinMode(sensors[i], OUTPUT);    
+            digitalWrite(sensors[i], HIGH); 
             delayMicroseconds(15);
-            pinMode(sensors[i], INPUT);      //pinMode(ioLine, INPUT);
+            pinMode(sensors[i], INPUT);     
             delayMicroseconds(thresholdTry); //mehr 0-en => Zahl runter, mehr 1-er => Zahl hoch
             if (digitalRead(sensors[i]) == 1)
                 how_often_do_we_have_a_1_in_a_row++;
-
             if (digitalRead(sensors[i]) == 0)
                 how_often_do_we_have_a_1_in_a_row = 0;
             if (how_often_do_we_have_a_1_in_a_row == testLimit)
@@ -222,7 +221,6 @@ void callibriereThreshold()
                 infimumThresholds[i] = thresholdTry;
                 break;
             }
-            digitalWrite(control, LOW);
             delayMicroseconds(500);
 
             if (5000 - steps - steps / 2 < thresholdTry)
@@ -260,23 +258,33 @@ void callibriereThreshold()
         Serial.print(threshold[i]);
         Serial.print(", ");
     }
+    saveThresholdsToROM();
+    Serial.println("\nIm ROM Speicher: ------------------");
+    for(int i = 0; i < numberOfSensors; i ++) {
+        Serial.print(i);
+        Serial.print(":");
+        Serial.print(EEPROM.read(i));
+        Serial.println(" ");
+    }
+    readThresholdsFromROM();
+    
     waitTillEnter();
-    //while(true);
+
 }
 
 /**
- * Gibt jeden Senor in der Console aus zu Testzwecken
+ * returns value of every sensor in terminal for testing reasons
  * 
- * In der Konsole sieht man etwa folgendes:
+ * Example output in consol:
  * .0X 1_ 2_ 3X 4X.
- * Das bedeutet, dass die Sensoren 0, 3 und 4 einen schwarzen Untergrund
- * erkennen, die Sensoren 1 und 2 einen weißen
+ * That means that sensors 0, 3 and 4 measure black
+ * while 1 and 2 measure white
 */
 void ausgabe()
 {
     for (int i = 0; i < numberOfSensors; i++)
     {
-        if (sensors[i] < 0)
+        if (sensors[i] < 0 || threshold[i] <= 0)
         {
             Serial.print(" ");
             continue;
@@ -291,10 +299,121 @@ void ausgabe()
 }
 
 /**
- * Hält das Programm so lange an, bis Enter gedrückt wird
+ * Halts programm untill enter-key is pressed
 */
 void waitTillEnter()
 {
     while (!Serial.available());
     Serial.readStringUntil('\n');
+}
+
+/**
+ * Checks, if there is a double orthogonal line
+ * thats important for special information about the road
+ * 
+ * @param left (L) and @param right (R) is either 0 or 1. For instance: L = 0 & R = 1 means: check if there is a double line right 
+ * 
+ * @return Has double orthogonal line been detected?
+*/
+bool checkPinsInRange(int left, int right){
+    int numberOfWhite = 0;
+    uint16_t pinOutput = getSensorData();
+    pinOutput = ~pinOutput;
+    for(int i = right * ((int)(numberOfSensors * 0.32)); i < (left ? ((int)(numberOfSensors*0.68)) : numberOfSensors); i++) {
+        if(pinOutput & (1 << (i))) numberOfWhite++;
+    }
+    int threshold = 2;
+    return ((numberOfWhite + threshold) >= (int)(numberOfSensors*0.6));
+}
+
+/**
+ * returns bool:  Has double orthogonal line been detected on hole line?
+ * 
+ * @return Has double orthogonal line been detected on hole line?
+*/
+bool fullLine() {
+    counterSinceLastOrthogonalLine++;
+    if(checkPinsInRange(1,0) && checkPinsInRange(0,1)) {
+        if(isIn(counterSinceLastOrthogonalLine,1,10) ) {
+            counterSinceLastOrthogonalLine = -1;
+            return true;
+        }
+        counterSinceLastOrthogonalLine = -1;
+    }
+    return false;
+}
+
+
+/**
+ * returns bool:  Has double orthogonal line been detected on right side of line?
+ * 
+ * @return Has double orthogonal line been detected on right side of line?
+*/
+bool halfLineRight() {
+    counterSinceLastOrthogonalLineRight++;
+    if(checkPinsInRange(0,1) && !checkPinsInRange(1,0) ) {
+        if(isIn(counterSinceLastOrthogonalLineRight,1,10) ) {
+            counterSinceLastOrthogonalLineRight = -1;
+            return true;
+        }
+        counterSinceLastOrthogonalLineRight = -1;
+    }
+    return false;
+    
+}
+
+
+/**
+ * returns bool:  Has double orthogonal line been detected on left side of line?
+ * 
+ * @return Has double orthogonal line been detected on left side of line?
+*/
+bool halfLineLeft() {
+    counterSinceLastOrthogonalLineLeft++;
+    if(checkPinsInRange(1,0) && !checkPinsInRange(0,1) ) {
+        if(isIn(counterSinceLastOrthogonalLineLeft,1,10) ) {
+            counterSinceLastOrthogonalLineLeft = -1;
+            return true;
+        }
+        counterSinceLastOrthogonalLineLeft = -1;
+    }
+    return false;
+}
+
+/**
+ * Answers question: is x between a and b?
+ * 
+ * @param x is number to check, @param a is left border, @param b is right border
+ * 
+ * @return is x between a and b?
+*/
+bool isIn(int x, int a, int b) {
+    return a <= x && x <= b;
+}
+
+/**
+ * Saves values from threshold[] array on permanent storage on ESP32
+*/
+void saveThresholdsToROM() {
+    for(int i = 0; i < numberOfSensors; i++) {
+        EEPROM.write(i, (threshold[i] / 10));
+        EEPROM.commit();
+
+    }
+    Serial.println("\nDone with saving. Gespeicherte Werte:");
+    for(int i = 0; i < numberOfSensors; i ++) {
+        Serial.print(i);
+        Serial.print(":");
+        Serial.print(EEPROM.read(i));
+        Serial.println(" ");
+    }
+}
+
+/**
+ * Loads values from permanent storage on ESP32 on threshold[] array
+*/
+void readThresholdsFromROM() {
+    for(int i = 0; i < numberOfSensors; i++) {
+        threshold[i] = EEPROM.read(i) * 10;
+    }
 }
